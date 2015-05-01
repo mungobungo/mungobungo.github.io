@@ -133,8 +133,8 @@ function generateCity(buildingCount, material){
 		THREE.GeometryUtils.merge(cityGeometry, building);
 	});
 	
-	//return new THREE.Mesh(cityGeometry, material);
-	return new THREE.Mesh(cityGeometry);
+	return new THREE.Mesh(cityGeometry, material);
+	//return new THREE.Mesh(cityGeometry);
 	
 }
 

@@ -1,0 +1,19 @@
+{
+  "name": "elomach",
+  "version": "0.0.1",
+  "description": "playing with three.js and eloquent javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mungobungo/elomach.git"
+  },
+  "author": "Oleg Taykalo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mungobungo/elomach/issues"
+  },
+  "homepage": "https://github.com/mungobungo/elomach"
+}

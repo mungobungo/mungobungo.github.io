@@ -13,3 +13,5 @@ http://www.amazon.com/Manga-Artists-Workbook-Easy-Follow
 http://www.amazon.com/Figure-Beginners-Guide-Drawing-People
 http://www.amazon.com/Cartooning-Ultimate-Character-Design-Book
 http://www.amazon.com/Keys-Drawing-Bert-Dodson
+http://www.amazon.com/Drawing-Trees-Dover-Art-Instruction
+http://www.amazon.com/The-Art-Animal-Drawing-Construction

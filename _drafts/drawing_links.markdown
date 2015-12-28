@@ -1,0 +1,15 @@
+http://www.amazon.com/How-Draw-What-You-See
+http://www.amazon.com/How-Draw-Cool-Stuff-Teachers
+http://www.amazon.com/Pencil-Drawing-Techniques-David-Lewis
+http://www.amazon.com/Drawing-Absolute-Beginner-Clear-Successful
+http://www.amazon.com/Pencil-Drawing-Project-beginners-Getting
+http://www.amazon.com/Draw-3-D-Doug-DuBosque
+http://www.amazon.com/Drawing-Nature-Absolute-Beginner-Landscapes
+http://www.amazon.com/Boys-Guide-Drawing-Cool-Stuff
+http://www.amazon.com/How-Draw-Comics-The-Marvel
+http://www.amazon.com/Light-Shade-Shadow-Dover-Instruction
+http://www.amazon.com/Perspective-Made-Easy-Dover-Instruction
+http://www.amazon.com/Manga-Artists-Workbook-Easy-Follow
+http://www.amazon.com/Figure-Beginners-Guide-Drawing-People
+http://www.amazon.com/Cartooning-Ultimate-Character-Design-Book
+http://www.amazon.com/Keys-Drawing-Bert-Dodson

@@ -15,3 +15,10 @@ http://www.amazon.com/Cartooning-Ultimate-Character-Design-Book
 http://www.amazon.com/Keys-Drawing-Bert-Dodson
 http://www.amazon.com/Drawing-Trees-Dover-Art-Instruction
 http://www.amazon.com/The-Art-Animal-Drawing-Construction
+http://www.amazon.com/How-Draw-Pokemon-Tracey-West
+http://www.amazon.com/Stan-Lees-How-Draw-Comics
+http://www.amazon.com/How-Draw-People-Dover
+http://www.amazon.com/How-Draw-Faces-Dover
+http://www.amazon.com/How-Draw-Monsters-Step-step
+http://www.amazon.com/Making-Comics-Storytelling-Secrets-Graphic
+http://www.amazon.com/Draw-3-D-Doug-DuBosque

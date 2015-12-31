@@ -74,5 +74,55 @@ ruby 2.2.1p85 (2015-02-26 revision 49769) [x86_64-linux]
 and run again
 
 ```
-sudo gem install -V -y chef-provisioning-docker
+sudo gem install -V -y chef-provisioning-docker chef-provisioning-aws chef-provisioning-fog
+```
+
+and after that
+
+config files
+
+```
+cat ~/.aws/config
+[default]
+region=us-west-2
+output=json
+
+```
+
+and also
+
+```
+cat ~/.aws/credentials
+[default]
+aws_access_key_id = KEY
+aws_secret_access_key = another_KEY
+
+```
+
+running everything locally
+```
+chef-client -z  cluster.rb
+```
+
+```
+require 'chef/provisioning'
+
+chef_provisioning :image_max_wait_time => 600, :machine_max_wait_time => 240
+
+timetag = Time.now. strftime("%Y-%m-%d_%H_%M_%S")
+machine "mario#{timetag}" do
+  tag 'itsa_me'
+end
+
+num_webservers = 1
+
+machine_batch do
+  1.upto(num_webservers) do |i|
+    machine "luigi#{i}" do
+     recipe 'apache'
+#     recipe 'mywebapp'
+    end
+  end
+end
+~        
 ```

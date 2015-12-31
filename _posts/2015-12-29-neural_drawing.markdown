@@ -18,8 +18,11 @@ http://neuralnetworksanddeeplearning.com/index.html
 и тутуриал
 https://sites.google.com/site/deeplearningcvpr2014/
 
-и введение в нейросети для программистов
-http://www.cs.nyu.edu/~yann/talks/lecun-ranzato-icml2013.pdf
+и введение в [нейросети для программистов](http://www.cs.nyu.edu/~yann/talks/lecun-ranzato-icml2013.pdf)
 
-а єто вообще кладезь совершенства
-https://github.com/mungobungo/awesome-deep-learning
+по торчу который используется для дип лернинга [torch туторьял](http://code.madbits.com/wiki/doku.php)
+
+а єто вообще кладезь совершенства [asesome deep learning](https://github.com/mungobungo/awesome-deep-learning)
+
+ссылка для байеса
+[bayes machine learning](https://www.metacademy.org/roadmaps/rgrosse/bayesian_machine_learning)

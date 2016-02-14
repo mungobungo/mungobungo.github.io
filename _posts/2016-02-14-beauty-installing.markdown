@@ -43,6 +43,16 @@ b64c1d772908: Download complete
 ```
 
 and after it was completed, added Docke file 
+```
+from kaixhin/cuda-torch
+
+RUN apt-get update && apt-get install -y \
+	libprotobuf-dev \
+        protobuf-compiler 
+
+RUN luarocks install loadcaffe
+
+```
 and 
 
 ```

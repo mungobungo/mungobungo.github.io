@@ -2,7 +2,9 @@ everything started with
 ```
 docker pull kaixhin/cuda-torch
 ```
+
 hopefully it would work
+
 took a long time...
 
 ```

@@ -1,0 +1,12 @@
+---
+layout: post
+title:  "useful links, arch, cert, docker"
+date:   2015-12-29 11:57:12 +0100
+categories: links123
+---
+
+http://www.jeeatwork.com/?p=90#more-90
+
+http://martinfowler.com/bliki/CertificationCompetenceCorrelation.html
+
+https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/

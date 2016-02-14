@@ -5,8 +5,8 @@ date:   2016-02-14 23:32:12 +0100
 categories: links123
 ---
 
-http://www.jeeatwork.com/?p=90#more-90
+[berkley tutorial](http://www.jeeatwork.com/?p=90#more-90) Also has nice cloud architect references
 
-http://martinfowler.com/bliki/CertificationCompetenceCorrelation.html
+certification is pointless, but needed [martin fowler's opinion](http://martinfowler.com/bliki/CertificationCompetenceCorrelation.html)
 
-https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/
+and just best practices for [creating docker files](https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/)

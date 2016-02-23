@@ -1,0 +1,12 @@
+---
+layout: post
+title:  "useful links, arch, cert, docker"
+date:   2016-02-14 23:32:12 +0100
+categories: links123
+---
+
+[berkley tutorial](http://www.jeeatwork.com/?p=90#more-90) Also has nice cloud architect references
+
+certification is pointless, but needed [martin fowler's opinion](http://martinfowler.com/bliki/CertificationCompetenceCorrelation.html)
+
+and just best practices for [creating docker files](https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/)

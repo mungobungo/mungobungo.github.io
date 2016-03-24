@@ -702,3 +702,187 @@ Running handlers:
 Running handlers complete
 Chef Client finished, 1/1 resources updated in 02 seconds
 ```
+
+
+# Berks.
+
+used to more easy work with cookbook dependencies.
+
+mostly stolen from here [http://www.jeeatwork.com/?p=108]
+
+let's create new cookbook
+
+```
+vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks$ knife cookbook create bertut -o .
+WARNING: No knife configuration file found
+** Creating cookbook bertut in /home/vagrant/projects/big_chef/cookbooks
+** Creating README for cookbook: bertut
+** Creating CHANGELOG for cookbook: bertut
+** Creating metadata for cookbook: bertut
+
+```
+
+and make
+
+```
+vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/bertut$ berks init
+      create  Berksfile
+      create  Thorfile
+      create  chefignore
+      create  .gitignore
+      create  Gemfile
+      create  .kitchen.yml
+    conflict  chefignore
+Overwrite /home/vagrant/projects/big_chef/cookbooks/bertut/chefignore? (enter "h" for help) [Ynaqdh] y
+       force  chefignore
+      append  Thorfile
+      create  test/integration/default
+      append  .gitignore
+      append  .gitignore
+      append  Gemfile
+      append  Gemfile
+You must run `bundle install' to fetch any new gems.
+      create  Vagrantfile
+Successfully initialized
+```
+
+afteward we need to remove .git folder, because our bertut is already under source control of bigger project
+
+```
+rm -fr .git
+```
+
+let's add dependency to other cookbook from the supermarket.
+
+for that open Berksfile and add cookbook dependency,  our good fellow from  previous execrices
+
+
+```
+source "https://supermarket.chef.io"
+
+metadata
+
+cookbook 'cheftutorial', git: 'https://github.com/mungobungo/cheftutorial.git'
+```
+
+and patch metadata.rb file with dependency
+
+```
+name             'bertut'
+maintainer       'YOUR_COMPANY_NAME'
+maintainer_email 'YOUR_EMAIL'
+license          'All rights reserved'
+description      'Installs/Configures bertut'
+long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
+version          '0.1.0'
+
+depends 'cheftutorial'
+```
+
+
+this is how you can use recipes from other cookbooks (inside default.rb or any other recipe)
+
+```
+include_recipe "cheftutorial::config-headed"
+```
+
+after that we should run
+
+```
+berks install
+```
+
+that will download all referenced cookbooks to local folder of 'bertut' book
+
+'berks install' should be run in root folder of 'bertut' cookbook
+
+```
+vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/bertut$ berks install
+Resolving cookbook dependencies...
+Fetching 'bertut' from source at .
+Fetching 'cheftutorial' from https://github.com/mungobungo/cheftutorial.git (at master)
+Fetching cookbook index from https://supermarket.chef.io...
+Using bertut (0.1.0) from source at .
+Using cheftutorial (0.1.0) from https://github.com/mungobungo/cheftutorial.git (at master)
+```
+
+now comes tricky stuff. we cannot test anymore the way we did before..
+so.
+(this can be also automated via chef)
+1) create folder for testing
+
+```
+mkdir -p /tmp/berks/cookbooks
+```
+
+2) populate test folder with all the cookbooks and their dependencies
+```
+vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/bertut$ berks vendor /tmp/berks/cookbooks
+Resolving cookbook dependencies...
+Fetching 'bertut' from source at .
+Using bertut (0.1.0) from source at .
+Using cheftutorial (0.1.0) from https://github.com/mungobungo/cheftutorial.git (at master)
+Vendoring bertut (0.1.0) to /tmp/berks/cookbooks/bertut
+Vendoring cheftutorial (0.1.0) to /tmp/berks/cookbooks/cheftutorial
+
+```
+
+
+3) create file client.rb in test folder
+```
+root = File.absolute_path(File.dirname(__FILE__))
+
+berks_cookbook_path = root + 'cookbooks'
+cookbook_path = berks_cookbook_path
+```
+
+
+4) run the recipe
+
+```
+vagrant@vagrant-VirtualBox:/tmp/berks$ chef-client -c $PWD/client.rb --local-mode --runlist "recipe[bertut::default]"
+Starting Chef Client, version 12.6.0
+resolving cookbooks for run list: ["bertut::default"]
+Synchronizing Cookbooks:
+  - bertut (0.1.0)
+  - cheftutorial (0.1.0)
+Compiling Cookbooks...
+Converging 2 resources
+Recipe: cheftutorial::config-headed
+  * template[/tmp/app-headed1.config] action create
+    - create new file /tmp/app-headed1.config
+    - update content in file /tmp/app-headed1.config from none to 8e5f98
+    --- /tmp/app-headed1.config	2016-03-24 18:23:11.835253999 +0100
+    +++ /tmp/.app-headed1.config20160324-10812-151uxy7	2016-03-24 18:23:11.835253999 +0100
+    @@ -1 +1,10 @@
+    + <header value = "header info" />
+    +
+    +<connectionStrings>
+    +	<metadata name="recipeName" value = "bertut::default" />
+    +	<ipaddress value = "" />
+    +	<nodename value = "vagrant-VirtualBox" />
+    +	<fromAttribute value = "babagalamaga" />
+    +</connectionStrings>
+    +
+    - change mode from '' to '0440'
+  * template[/tmp/app-headed2.config] action create
+    - create new file /tmp/app-headed2.config
+    - update content in file /tmp/app-headed2.config from none to 4dffa0
+    --- /tmp/app-headed2.config	2016-03-24 18:23:11.847253999 +0100
+    +++ /tmp/.app-headed2.config20160324-10812-194bdwu	2016-03-24 18:23:11.847253999 +0100
+    @@ -1 +1,10 @@
+    + <header value = "and so it goes.." />
+    +
+    +<connectionStrings>
+    +	<metadata name="recipeName" value = "nothing" />
+    +	<ipaddress value = "" />
+    +	<nodename value = "inception.here" />
+    +	<fromAttribute value = "No_name.inc" />
+    +</connectionStrings>
+    +
+    - change mode from '' to '0440'
+
+Running handlers:
+Running handlers complete
+Chef Client finished, 2/2 resources updated in 02 seconds
+```

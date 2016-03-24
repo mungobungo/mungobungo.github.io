@@ -580,3 +580,125 @@ quick recap:
 ## templates are like, well, templates. it can be used in recipes to generate fiels based on that templates.
 
 ## best practice is not to use attributes directly from templates. let the recipes to inject proper values to the template
+
+
+
+Some more we need to add here is files and guess what. yes. definitions.
+
+files are simple. Those are just templates but without parameters. simple goold old files.
+
+files are created in files folder of cookbook. easy to remember heh..
+
+```
+vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/cheftutorial/files$ cat file.txt
+```
+
+gives us
+
+```
+and we put something to the file direclty
+```
+
+and we can use it following way
+
+```
+cookbook_file "file.txt" do
+  path "/tmp/file.txt"
+  mode "644"
+  action :create
+end
+```
+
+and ouput will be like this
+
+```
+vagrant@vagrant-VirtualBox:~/projects/big_chef$ chef-client --local-mode --runlist "recipe[cheftutorial::file-creation]"
+[2016-03-24T16:35:18+01:00] WARN: No config file found or specified on command line, using command line options.
+Starting Chef Client, version 12.6.0
+resolving cookbooks for run list: ["cheftutorial::file-creation"]
+Synchronizing Cookbooks:
+  - cheftutorial (0.1.0)
+Compiling Cookbooks...
+Converging 1 resources
+Recipe: cheftutorial::file-creation
+  * cookbook_file[file.txt] action create
+    - create new file /tmp/file.txt
+    - update content in file /tmp/file.txt from none to bf2b7d
+    --- /tmp/file.txt	2016-03-24 16:35:21.013374999 +0100
+    +++ /tmp/.file.txt20160324-9125-4pt5ob	2016-03-24 16:35:21.013374999 +0100
+    @@ -1 +1,3 @@
+    +and we put something to the file direclty
+    +
+    - change mode from '' to '0644'
+
+Running handlers:
+Running handlers complete
+Chef Client finished, 1/1 resources updated in 02 seconds
+
+```
+
+
+sidenote- if we're doing cross-platform solutions, we might need to have different configs for different platforms
+
+it can be done using attribute
+
+```
+node['platform']
+```
+
+when executed it can show 'windows' or 'ubuntu' or 'fedora' or whatever is considered as a platform
+
+
+#creating _definitions_
+Now we know a lot. but how those commands are really implemented under the hood?
+how that *log* or *cookbook_file* works?
+
+to find it out we need to implement something ourselves.
+
+here we are defining createfile definition. Basically you can think about it as of macro or just function that can be used inside of recipes.
+you can pass parameters there and use them inside of the definition
+
+```
+define :createfile, :path => nil, :content => nil do
+  file "#{params[:path]}" do
+    content "#{params[:content]}"
+  end
+end
+```
+
+now we can use our own definition in our own recipes.
+just like a bosch. see how paramerers are passed to definition
+
+
+```
+createfile "/tmp/definitonfile.txt" do
+   path "/tmp/definitonfile.txt"
+   content "Created using definitions"
+end
+```
+if you can spot code duplication here, you're wrong. filename and path are configured in parameter _path_ and that string that goes afer _createfile_ is just name of the step.
+
+executing
+
+```
+vagrant@vagrant-VirtualBox:~/projects/big_chef$ chef-client --local-mode --runlist "recipe[cheftutorial::file-def]"
+[2016-03-24T16:51:51+01:00] WARN: No config file found or specified on command line, using command line options.
+Starting Chef Client, version 12.6.0
+resolving cookbooks for run list: ["cheftutorial::file-def"]
+Synchronizing Cookbooks:
+  - cheftutorial (0.1.0)
+Compiling Cookbooks...
+Converging 1 resources
+Recipe: cheftutorial::file-def
+  * file[/tmp/definitonfile.txt] action create
+    - create new file /tmp/definitonfile.txt
+    - update content in file /tmp/definitonfile.txt from none to 934744
+    --- /tmp/definitonfile.txt	2016-03-24 16:51:54.073374999 +0100
+    +++ /tmp/.definitonfile.txt20160324-9408-1kof23b	2016-03-24 16:51:54.073374999 +0100
+    @@ -1 +1,2 @@
+    +Created using definitions
+
+Running handlers:
+Running handlers complete
+Chef Client finished, 1/1 resources updated in 02 seconds
+```

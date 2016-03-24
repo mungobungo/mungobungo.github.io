@@ -886,3 +886,12 @@ Running handlers:
 Running handlers complete
 Chef Client finished, 2/2 resources updated in 02 seconds
 ```
+
+also, references to other cookbooks could be also added to Berksfile
+
+```
+cookbook 'memcached'
+cookbook 'nginx'
+```
+
+those books would be taken from supermarket

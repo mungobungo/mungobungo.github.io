@@ -1,7 +1,17 @@
+---
+layout: post
+title:  "chef  tutorial"
+date:   2016-03-24 10:00:00 +0100
+categories: chef
+---
+
+Original post series was done by this guy
+http://www.jeeatwork.com/?p=102
+
 inside of the chef tutorials.
 
 
-So plan is basically following:
+So plan is basically following:c
 # create basic cookbook
 # apply cookbook to local linux
 # create docker recipe for provisioning
@@ -42,7 +52,7 @@ and after that you can apply this recipe locally on windows or linux. Which you 
 here how it looks on linux box
 
 ```
-vagrant@vagrant-VirtualBox:~/cheftutorial/recipes$ chef-apply welcome.rb 
+vagrant@vagrant-VirtualBox:~/cheftutorial/recipes$ chef-apply welcome.rb
 Recipe: (chef-apply cookbook)::(chef-apply recipe)
   * log[Hello vagrant] action write
 
@@ -88,7 +98,7 @@ end
 now if you try it to run in old way, youll get an error
 
 ```
-chef-apply recipes/welcome.rb 
+chef-apply recipes/welcome.rb
 [2016-03-24T10:58:31+01:00] FATAL: Stacktrace dumped to /home/vagrant/.chef/cache/chef-stacktrace.out
 [2016-03-24T10:58:31+01:00] FATAL: Please provide the contents of the stacktrace.out file if you file a bug report
 [2016-03-24T10:58:31+01:00] FATAL: NoMethodError: undefined method `[]' for nil:NilClass
@@ -104,7 +114,7 @@ first of all, lets get back to ourt root bigchef folder
 cd ~/bigchef
 ```
 
-and run 
+and run
 
 ```
 chef-client --local-mode --runlist "recipe[cheftutorial::welcome]"
@@ -125,9 +135,9 @@ Compiling Cookbooks...
 Converging 2 resources
 Recipe: cheftutorial::welcome
   * log[Hello vagrant] action write
-  
+
   * log[And attribute is also here babagalamaga] action write
-  
+
 
 Running handlers:
 Running handlers complete
@@ -166,17 +176,15 @@ Compiling Cookbooks...
 Converging 3 resources
 Recipe: cheftutorial::welcome
   * log[Hello vagrant] action write
-  
+
   * log[And attribute is also here babagalamaga] action write
-  
+
 Recipe: cheftutorial::hello
   * log[Hello guy someghing babagalamaga] action write
-  
+
 
 Running handlers:
 Running handlers complete
 Chef Client finished, 3/3 resources updated in 02 seconds
 
 ```
-
-

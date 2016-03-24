@@ -76,7 +76,7 @@ attributes are stored in files indide _attributes_ directory. Pretty logical als
 
 Let's see what can we do with it.
 
-adding new attribute to new file _attributes_/_defautl.rb_
+adding new attribute to new file defautl.rb
 
 ```
 default["cheftutorial"]["name"] = "babagalamaga"

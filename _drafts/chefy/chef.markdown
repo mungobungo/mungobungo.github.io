@@ -126,3 +126,15 @@ machine_batch do
 end
 ~        
 ```
+
+installing keypairs to  joyful
+
+```
+aws ec2 create-key-pair --key-name hackdaypair --query 'KeyMaterial' --output text > hackdaypair.pem
+```
+
+You want to remove the passphrase from a key file. Run this:
+
+```
+openssl rsa -in key.pem -out newkey.pem
+```

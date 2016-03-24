@@ -1,0 +1,8 @@
+nice akka .net intro
+http://www.codeproject.com/Articles/1007161/A-Look-At-Akka-NET
+
+nice Erlang Zen article
+http://ferd.ca/the-zen-of-erlang.html
+
+how to get first 100 customers
+https://www.stackfield.com/blog/how-we-got-our-first-100-paying-customers-33

@@ -1,0 +1,182 @@
+inside of the chef tutorials.
+
+
+So plan is basically following:
+# create basic cookbook
+# apply cookbook to local linux
+# create docker recipe for provisioning
+# apply cookbook to docker
+# create vagrant recipe for provisioning
+# apply cookbook to vagrant
+# crate vagrant recipe for ec2
+# apply cookbookt to ec2
+
+
+lets create our big project folder, make it git repo and create cookbooks folder where we will store all our cookbooks
+
+```
+mkdir big_chef
+cd big_chef
+git init
+mkdir cookbooks
+cd cookbooks
+```
+
+now we can  create cookbook. this is done via
+
+```
+knife cookbook create cheftutorial -o .
+```
+
+after this we go to cheftutorial\recipes
+and create file welcome.rb
+
+```
+log "Hello #{ENV['USER']}" do
+  level :info
+end
+```
+
+and after that you can apply this recipe locally on windows or linux. Which you prefer the most.
+
+here how it looks on linux box
+
+```
+vagrant@vagrant-VirtualBox:~/cheftutorial/recipes$ chef-apply welcome.rb 
+Recipe: (chef-apply cookbook)::(chef-apply recipe)
+  * log[Hello vagrant] action write
+
+
+```
+
+and here's snaphost of windows output
+
+```
+C:\Users\otaykalo\projects\bigchef\cheftutorial> chef-apply .\recipes\welcom.rb
+Recipe: (chef-apply cookbook)::(chef-apply recipe)
+  * log[Hello otaykalo] action write
+
+```
+
+looks pretty similar, which is nice.
+
+So now we can go further. To share information between recipes whe can use *attributes*
+
+attributes are stored in files indide _attributes_ directory. Pretty logical also
+
+Let's see what can we do with it.
+
+adding new attribute to new file _attributes_/_defautl.rb_
+```
+default["cheftutorial"]["name"] = "babagalamaga"
+
+```
+
+and use it from welcome message
+
+```
+log "Hello #{ENV['USER']}" do
+  level :info
+end
+
+log "And attribute is also here #{node['cheftutorial']['name']}" do
+   level :info
+end
+
+```
+
+now if you try it to run in old way, youll get an error
+
+```
+chef-apply recipes/welcome.rb 
+[2016-03-24T10:58:31+01:00] FATAL: Stacktrace dumped to /home/vagrant/.chef/cache/chef-stacktrace.out
+[2016-03-24T10:58:31+01:00] FATAL: Please provide the contents of the stacktrace.out file if you file a bug report
+[2016-03-24T10:58:31+01:00] FATAL: NoMethodError: undefined method `[]' for nil:NilClass
+
+```
+
+This happens because we're trying to run chef in plain _one-and-only-recipy-mode_ and it doesn't know anything about attributes. Because they live in different folder and all that.
+
+So how can we fix it?
+
+first of all, lets get back to ourt root bigchef folder
+```
+cd ~/bigchef
+```
+
+and run 
+
+```
+chef-client --local-mode --runlist "recipe[cheftutorial::welcome]"
+
+```
+
+
+Output should be something like this
+
+```
+vagrant@vagrant-VirtualBox:~/projects/big_chef$ chef-client --local-mode --runlist "recipe[cheftutorial::welcome]"
+[2016-03-24T11:06:40+01:00] WARN: No config file found or specified on command line, using command line options.
+Starting Chef Client, version 12.6.0
+resolving cookbooks for run list: ["cheftutorial::welcome"]
+Synchronizing Cookbooks:
+  - cheftutorial (0.1.0)
+Compiling Cookbooks...
+Converging 2 resources
+Recipe: cheftutorial::welcome
+  * log[Hello vagrant] action write
+  
+  * log[And attribute is also here babagalamaga] action write
+  
+
+Running handlers:
+Running handlers complete
+Chef Client finished, 2/2 resources updated in 02 seconds
+
+```
+
+so far so good. But what if we want to run several recipes at once?
+
+Well, let's try
+
+crating new recipe hello.rb at cheftutorial/recipes folder
+
+```
+log "Hello guy someghing #{node['cheftutorial']['name']}" do
+   level :info
+end
+
+```
+
+and run chef-apply again from root folder of the project (*not* cheftutorial folder)
+
+```
+vagrant@vagrant-VirtualBox:~/projects/big_chef$ chef-client --local-mode --runlist "cheftutorial::welcome,cheftutorial::hello"
+```
+
+as you can see, you can specify as many recipes as you want. this is why it is called runLIST.
+
+```
+[2016-03-24T11:28:30+01:00] WARN: No config file found or specified on command line, using command line options.
+Starting Chef Client, version 12.6.0
+resolving cookbooks for run list: ["cheftutorial::welcome", "cheftutorial::hello"]
+Synchronizing Cookbooks:
+  - cheftutorial (0.1.0)
+Compiling Cookbooks...
+Converging 3 resources
+Recipe: cheftutorial::welcome
+  * log[Hello vagrant] action write
+  
+  * log[And attribute is also here babagalamaga] action write
+  
+Recipe: cheftutorial::hello
+  * log[Hello guy someghing babagalamaga] action write
+  
+
+Running handlers:
+Running handlers complete
+Chef Client finished, 3/3 resources updated in 02 seconds
+
+```
+
+

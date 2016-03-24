@@ -364,10 +364,219 @@ Chef Client finished, 1/1 resources updated in 02 seconds
 
 Haleluia , now we know how to mix recipes, attributes and templates.
 
+but, i don't really like that templates know about attributes. So, what can we do to inject dependencies?
+And reduce amount of work if we need to update attributes, or rename them or run use different attributes with the same template? Is there a was?
+For sure. variables to the rescue.
+
+
+our third approach to attributed templates.
+
+
+our template now looks like this
+
+```
+<connectionStrings>
+        <metadata name="recipeName" value = "<%= @recipe %>" />
+        <ipaddress value = "<%= @ipaddress %>" />
+        <nodename value = "<%= @fqdn %>" />
+        <fromAttribute value = "<%= @name%>" />
+</connectionStrings>
+
+```
+
+and we can use it in recipes.
+Lets create two files with from the same template, but with different variables
+
+```
+template "/tmp/app-variable1.config" do
+  source "app.varialble.config.erb"
+  variables({
+    :recipe => node['recipes'][0],
+    :ip => node['ipaddress'],
+    :fqdn => node['fqdn'],
+    :name => node['cheftutorial']['name']
+  })
+  mode '0440'
+end
+
+template "/tmp/app-variable2.config" do
+  source "app.varialble.config.erb"
+  variables({
+    :recipe => "nothing",
+    :ip => "middle.of.nowhere",
+    :fqdn => "inception.here",
+    :name => "No_name.inc"
+  })
+  mode '0440'
+end
+
+```
+
+
+running it...
+
+```
+vagrant@vagrant-VirtualBox:~/projects/big_chef$ chef-client --local-mode --runlist "recipe[cheftutorial::config-variables]"
+[2016-03-24T15:09:19+01:00] WARN: No config file found or specified on command line, using command line options.
+Starting Chef Client, version 12.6.0
+resolving cookbooks for run list: ["cheftutorial::config-variables"]
+Synchronizing Cookbooks:
+  - cheftutorial (0.1.0)
+Compiling Cookbooks...
+Converging 2 resources
+Recipe: cheftutorial::config-variables
+  * template[/tmp/app-variable1.config] action create
+    - create new file /tmp/app-variable1.config
+    - update content in file /tmp/app-variable1.config from none to 6c09ee
+    --- /tmp/app-variable1.config	2016-03-24 15:09:22.173374999 +0100
+    +++ /tmp/.app-variable1.config20160324-8444-1ds6rqr	2016-03-24 15:09:22.173374999 +0100
+    @@ -1 +1,8 @@
+    +<connectionStrings>
+    +	<metadata name="recipeName" value = "cheftutorial::config-variables" />
+    +	<ipaddress value = "" />
+    +	<nodename value = "vagrant-VirtualBox" />
+    +	<fromAttribute value = "babagalamaga" />
+    +</connectionStrings>
+    +
+    - change mode from '' to '0440'
+  * template[/tmp/app-variable2.config] action create
+    - create new file /tmp/app-variable2.config
+    - update content in file /tmp/app-variable2.config from none to 56e534
+    --- /tmp/app-variable2.config	2016-03-24 15:09:22.197374999 +0100
+    +++ /tmp/.app-variable2.config20160324-8444-hip4e0	2016-03-24 15:09:22.197374999 +0100
+    @@ -1 +1,8 @@
+    +<connectionStrings>
+    +	<metadata name="recipeName" value = "nothing" />
+    +	<ipaddress value = "" />
+    +	<nodename value = "inception.here" />
+    +	<fromAttribute value = "No_name.inc" />
+    +</connectionStrings>
+    +
+    - change mode from '' to '0440'
+
+Running handlers:
+Running handlers complete
+Chef Client finished, 2/2 resources updated in 02 seconds
+
+```
+
+coool.
+
+but still, what if we want to use several templates that depends on each other? like header and other components?
+well, here we go.
+
+
+let´s pretend we want all our confing file have some copyright info in the header
+so, here´s header template and we call it.. well, header.rb
+
+```
+<header value = "<%= @info %>" />
+```
+
+and another template app.headed.config.erb , we incude header using render directive. see the first line of the exmaple
+
+```
+<%= render "header.erb" %>
+
+<connectionStrings>
+	<metadata name="recipeName" value = "<%= @recipe %>" />
+	<ipaddress value = "<%= @ipaddress %>" />
+	<nodename value = "<%= @fqdn %>" />
+	<fromAttribute value = "<%= @name%>" />
+</connectionStrings>
+
+```
+
+recipe for using it should be pretty obvious, just don't forget about _info_ variable we need to inject for header template to work properly.
+
+
+```
+template "/tmp/app-headed1.config" do
+  source "app.headed.config.erb"
+  variables({
+    :recipe => node['recipes'][0],
+    :ip => node['ipaddress'],
+    :fqdn => node['fqdn'],
+    :name => node['cheftutorial']['name'],
+    :info => "header info"
+  })
+  mode '0440'
+end
+
+template "/tmp/app-headed2.config" do
+  source "app.headed.config.erb"
+  variables({
+    :recipe => "nothing",
+    :ip => "middle.of.nowhere",
+    :fqdn => "inception.here",
+    :name => "No_name.inc",
+    :info => "and so it goes.."
+  })
+  mode '0440'
+end
+```
+
+
+And running example
+
+```
+vagrant@vagrant-VirtualBox:~/projects/big_chef$ chef-client --local-mode --runlist "recipe[cheftutorial::config-headed]"
+[2016-03-24T15:44:18+01:00] WARN: No config file found or specified on command line, using command line options.
+Starting Chef Client, version 12.6.0
+resolving cookbooks for run list: ["cheftutorial::config-headed"]
+Synchronizing Cookbooks:
+  - cheftutorial (0.1.0)
+Compiling Cookbooks...
+Converging 2 resources
+Recipe: cheftutorial::config-headed
+  * template[/tmp/app-headed1.config] action create
+    - create new file /tmp/app-headed1.config
+    - update content in file /tmp/app-headed1.config from none to c8af11
+    --- /tmp/app-headed1.config	2016-03-24 15:44:20.757374999 +0100
+    +++ /tmp/.app-headed1.config20160324-8792-1pvmbr	2016-03-24 15:44:20.757374999 +0100
+    @@ -1 +1,10 @@
+    + <header value = "header info" />
+    +
+    +<connectionStrings>
+    +	<metadata name="recipeName" value = "cheftutorial::config-headed" />
+    +	<ipaddress value = "" />
+    +	<nodename value = "vagrant-VirtualBox" />
+    +	<fromAttribute value = "babagalamaga" />
+    +</connectionStrings>
+    +
+    - change mode from '' to '0440'
+  * template[/tmp/app-headed2.config] action create
+    - create new file /tmp/app-headed2.config
+    - update content in file /tmp/app-headed2.config from none to 4dffa0
+    --- /tmp/app-headed2.config	2016-03-24 15:44:20.777374999 +0100
+    +++ /tmp/.app-headed2.config20160324-8792-1iwbbl4	2016-03-24 15:44:20.777374999 +0100
+    @@ -1 +1,10 @@
+    + <header value = "and so it goes.." />
+    +
+    +<connectionStrings>
+    +	<metadata name="recipeName" value = "nothing" />
+    +	<ipaddress value = "" />
+    +	<nodename value = "inception.here" />
+    +	<fromAttribute value = "No_name.inc" />
+    +</connectionStrings>
+    +
+    - change mode from '' to '0440'
+
+Running handlers:
+Running handlers complete
+Chef Client finished, 2/2 resources updated in 02 seconds
+```
+
+See ? we've added header, and not just header, but header that can also have some variables.
+
+I think this is more then enough for now so we will leave templates and attributes and start moving to things called files...
+
 quick recap:
 
-# recipes are like programs or modules or functions that can get stuff done
+## recipes are like programs or modules or functions that can get stuff done
 
-# attributes are like metadata variables, for stuff you want share between recipes and do not want to hardcode
+## attributes are like metadata variables, for stuff you want share between recipes and do not want to hardcode
 
-# templates are like, well, templates. it can be used in recipes to generate fiels based on that templates. configs, html, dummy files, younameit
+## templates are like, well, templates. it can be used in recipes to generate fiels based on that templates.
+
+## best practice is not to use attributes directly from templates. let the recipes to inject proper values to the template

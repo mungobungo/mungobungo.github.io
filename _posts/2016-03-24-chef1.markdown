@@ -365,6 +365,9 @@ Chef Client finished, 1/1 resources updated in 02 seconds
 Haleluia , now we know how to mix recipes, attributes and templates.
 
 quick recap:
+
 # recipes are like programs or modules or functions that can get stuff done
+
 # attributes are like metadata variables, for stuff you want share between recipes and do not want to hardcode
+
 # templates are like, well, templates. it can be used in recipes to generate fiels based on that templates. configs, html, dummy files, younameit

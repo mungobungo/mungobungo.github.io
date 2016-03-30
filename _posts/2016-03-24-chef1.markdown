@@ -16,7 +16,6 @@ So plan is basically following:
 * create basic cookbook
   * [holding the knife](#hold_knife)
   * [creating cookbook](#create_cookbook)
-* apply cookbook to local linux
 
 
 * create docker recipe for provisioning
@@ -31,7 +30,7 @@ So plan is basically following:
 
 * apply cookbookt to ec2
 
-##  <a name="hold_knife"></a>Holding the knife
+#  <a name="hold_knife"></a>Holding the knife
 
 Let's create our big project folder, make it [Chef tutorial git repo](https://github.com/mungobungo/cheftutorial.git) and create cookbooks folder where we will store all our cookbooks
 
@@ -43,7 +42,7 @@ mkdir cookbooks
 cd cookbooks
 ```
 
-## <a name="create_cookbook"> </a> Creating cookbook
+# <a name="create_cookbook"> </a> Creating cookbook
 Now we can create cookbook. this is done via
 
 ```shell
@@ -61,7 +60,7 @@ end
 
 and after that you can apply this recipe locally on windows or linux. Which you prefer the most.
 
-## <a name="howto_run_linux"> </a> How to run simple recipe on Linux
+# <a name="howto_run_linux"> </a> How to run simple recipe on Linux
 Here how it looks on linux box
 
 ```shell
@@ -71,7 +70,8 @@ Recipe: (chef-apply cookbook)::(chef-apply recipe)
 
 
 ```
-## <a name="howto_run_win"> </a> How to run simple recipe on Windows
+
+# <a name="howto_run_win"> </a> How to run simple recipe on Windows
 and here's snaphost of windows output
 
 ```powershell
@@ -84,7 +84,7 @@ Recipe: (chef-apply cookbook)::(chef-apply recipe)
 looks pretty similar, which is nice.
 Further examples would be linux only, just for sake of brevity.
 
-# <a name="attributes"></a> What is attributes?
+# <a name="attributes"></a> What is attribute?
 
 So now we can go further. To share information between recipes whe can use *attributes*
 
@@ -92,7 +92,9 @@ Attributes are stored in files inside [attributes directory](https://github.com/
 Pretty logical also
 
 Let's see what can we do with it.
-## <a name="create_attribute"></a> How to create attribute?
+
+# <a name="create_attribute"></a> How to create an attribute?
+
 adding new attribute to new file [defautl.rb](https://github.com/mungobungo/cheftutorial/blob/master/attributes/default.rb)
 
 ```ruby
@@ -100,8 +102,9 @@ default["cheftutorial"]["name"] = "babagalamaga"
 
 ```
 
-## <a name="use_attribute"></a> How to use attribute inside recipe?
-and use it from [welcome.rb recipe](https://github.com/mungobungo/cheftutorial/blob/master/recipes/welcome.rb)
+# <a name="use_attribute"></a> How to use attribute inside recipe?
+
+And use it from [welcome.rb recipe](https://github.com/mungobungo/cheftutorial/blob/master/recipes/welcome.rb)
 
 ```ruby
 log "Hello #{ENV['USER']}" do
@@ -127,7 +130,7 @@ This happens because we're trying to run chef in plain _one-and-only-recipy-mode
 
 So how can we fix it?
 
-## <a name="chef_runlist"></a> How to run cookbook with runlist
+# <a name="chef_runlist"></a> How to run cookbook with runlist
 
 first of all, lets get back to our root bigchef folder
 
@@ -167,7 +170,8 @@ Chef Client finished, 2/2 resources updated in 02 seconds
 
 So far so good.
 
-## <a name="chef_runlist2"></a> How to run several recipes using runlist
+# <a name="chef_runlist2"></a> How to run several recipes using runlist
+
 But what if we want to run several recipes at once?
 
 Well, let's try
@@ -211,7 +215,8 @@ Chef Client finished, 3/3 resources updated in 02 seconds
 
 ```
 
-# <a name="templates"></a> What is templates
+# <a name="templates_intro"></a> What is template?
+
 Next chapter.  When using chef and or provisioning something you need to create config files.
 Or html pages. or something like that. doing it by hands is kinda stupid. this is why chef has tempaltes.
 So let's have fun.
@@ -251,7 +256,7 @@ You should see following output
 </ul>
 
 ```
-## <a name="template_create"></a> How to create template?
+# <a name="template_create"></a> How to create template?
 
 Let's say we want to generate config file in specified folder with ip of the machine it is run on.
 First we need to create template and put it to [templates folder](https://github.com/mungobungo/cheftutorial/tree/master/templates).
@@ -265,7 +270,7 @@ something like [app.config.erb](https://github.com/mungobungo/cheftutorial/blob/
 </connectionStrings>
 ```
 
-## <a name="template_use"></a> How use tempalte from recipe?
+# <a name="template_use"></a> How to use tempalte from recipe?
 When we have created template, we can use it in our recipes. Something like that
 
 File [config.rb](https://github.com/mungobungo/cheftutorial/blob/master/recipes/config.rb) in [_recipes_ folder](https://github.com/mungobungo/cheftutorial/tree/master/recipes)
@@ -324,7 +329,8 @@ vagrant@vagrant-VirtualBox:~/projects/big_chef$ cat /tmp/app.config
 
 yep. It is alive. know what? i'm happy
 
-## <a name="templates_attributes"></a> How to use attributes inside templates?
+# <a name="templates_attributes"></a> How to use attributes inside templates?
+
 The next logical question comes to my mind now - can we use attributes in our templates, the same way we do it in recipes?  
 
 Creating new template and recipe to check that
@@ -388,7 +394,7 @@ Chef Client finished, 1/1 resources updated in 02 seconds
 
 Haleluia , now we know how to mix recipes, attributes and templates.
 
-## <a name="templates_variables"></a> How to use variables inside templates or template IoC?
+# <a name="templates_variables"></a> How to use variables inside templates or template IoC?
 
 But, I don't really like that templates know about attributes. So, what can we do to inject dependencies?
 And reduce amount of work if we need to update attributes, or rename them or run use different attributes with the same template? Is there a was?
@@ -485,7 +491,8 @@ Chef Client finished, 2/2 resources updated in 02 seconds
 
 Coool.
 
-## <a name="templates_deps"></a> How to create template that uses another template?
+# <a name="templates_deps"></a> How to create template that uses another template?
+
 But still, what if we want to use several templates that depends on each other? like header and other components?
 well, here we go.
 
@@ -595,6 +602,7 @@ Chef Client finished, 2/2 resources updated in 02 seconds
 See ? we've added header, and not just header, but header that can also have some variables.
 
 # <a name="files"></a> How to use files inside of recipes?
+
 I think this is more then enough for now so we will leave templates and attributes and start moving to things called files...
 
 Some more we need to add here is files and guess what. yes. definitions.
@@ -664,7 +672,7 @@ node['platform']
 >when executed it can show 'windows' or 'ubuntu' or 'fedora' or whatever is considered as a platform
 
 
-#creating _definitions_
+# <a name="definitions_intro"></a> What are definitions?
 
 Now we know a lot. but how those commands are really implemented under the hood?
 how that *log* or *cookbook_file* works?
@@ -675,6 +683,8 @@ here we are defining createfile definition. Basically you can think about it as 
 you can pass parameters there and use them inside of the definition
 
 Definitions are stored, as you can already guess in [definitions folder](https://github.com/mungobungo/cheftutorial/blob/master/definitions/)
+
+# <a name="definitions_create"></a> How to create a definition?
 
 We will add our own [file-definition.rb definition](https://github.com/mungobungo/cheftutorial/blob/master/definitions/file-definition.rb)
 
@@ -687,7 +697,7 @@ end
 ```
 
 Now we can use our own definition in our own recipes.
-just like a (Bosch)[https://en.wikipedia.org/wiki/The_Garden_of_Earthly_Delights]. see how parameters are passed to definition
+just like a [Bosch](https://en.wikipedia.org/wiki/The_Garden_of_Earthly_Delights). see how parameters are passed to definition
 
 [file-def.rb recipe](https://github.com/mungobungo/cheftutorial/blob/master/recipes/file-def.rb)
 
@@ -737,8 +747,7 @@ Quick recap:
 * Cookbook is like a module (assembly, library, artifact) that has recipes, attributes and templates in it.
 
 
-
-# Berks.
+## <a name="berks"></a> How to work with cookbook dependencies using Berkshelf?
 
 Used to more easy work with cookbook dependencies.
 
@@ -785,9 +794,11 @@ afteward we need to remove .git folder, because our bertut is already under sour
 rm -fr .git
 ```
 
-let's add dependency to other cookbook from the supermarket.
+Let's add dependency to other cookbook from the supermarket.
 
-for that open [Berksfile](https://github.com/mungobungo/bertut/blob/master/Berksfile) and add cookbook dependency,  our good fellow from  previous execrices
+# <a name="berks_add_dep"></a> How to add cookbook dependency?
+
+Open [Berksfile](https://github.com/mungobungo/bertut/blob/master/Berksfile) and add cookbook dependency,  our good fellow from  previous execrices
 
 
 ```ruby
@@ -812,8 +823,8 @@ version          '0.1.0'
 depends 'cheftutorial'
 ```
 
-
-this is how you can use recipes from other cookbooks (inside [default.rb](https://github.com/mungobungo/bertut/blob/master/recipes/default.rb) or any other recipe)
+# <a name="berks_usage"></a> How use recipes from other cookbooks?
+This is how you can use recipes from other cookbooks (inside [default.rb](https://github.com/mungobungo/bertut/blob/master/recipes/default.rb) or any other recipe)
 
 ```ruby
 include_recipe "cheftutorial::config-headed"
@@ -923,16 +934,16 @@ Running handlers complete
 Chef Client finished, 2/2 resources updated in 02 seconds
 ```
 
-also, references to other cookbooks could be also added to Berksfile
+# <a name="chef_supermarket"></a> Where can I find more recipes?
+A lot of cookbooks can be taken from [Chef Supermarket](https://supermarket.chef.io/)
+References could be also added to Berksfile
 
 ```ruby
 cookbook 'memcached'
 cookbook 'nginx'
 ```
 
-those books would be taken from [Chef Supermarket](https://supermarket.chef.io/)
-
-For example, you can install PostgreSql server to Ubuntu just using this simple recipe
+For example, you can install PostgreSql server to Ubuntu using this simple recipe
 
 ```ruby
 include_recipe postgresql::server

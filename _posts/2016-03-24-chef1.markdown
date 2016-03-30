@@ -11,17 +11,27 @@ http://www.jeeatwork.com/?p=102
 inside of the chef tutorials.
 
 
-So plan is basically following:c
+So plan is basically following:
+
 * create basic cookbook
+  * [holding the knife](#hold_knife)
+  * [creating cookbook](#create_cookbook)
 * apply cookbook to local linux
+
+
 * create docker recipe for provisioning
+
 * apply cookbook to docker
+
 * create vagrant recipe for provisioning
+
 * apply cookbook to vagrant
+
 * crate vagrant recipe for ec2
+
 * apply cookbookt to ec2
 
-## Holding the knife
+##  <a name="hold_knife"></a>Holding the knife
 
 Let's create our big project folder, make it [Chef tutorial git repo](https://github.com/mungobungo/cheftutorial.git) and create cookbooks folder where we will store all our cookbooks
 
@@ -33,6 +43,7 @@ mkdir cookbooks
 cd cookbooks
 ```
 
+## <a name="create_cookbook"> </a> Creating cookbook
 Now we can create cookbook. this is done via
 
 ```shell

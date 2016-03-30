@@ -982,3 +982,17 @@ It will install the postgresql server packages and sets up the service. Also it 
 * manage the pg_hba.conf file.
 
 Kinda nice for a single line of code heh. )
+
+
+And of course you can reference cookbooks not only from Supermarket
+
+```ruby
+source "https://supermarket.chef.io"
+
+metadata
+
+cookbook 'memcached'
+cookbook 'nginx'
+cookbook 'pvpnet', path: '/some/local/path/fun-cookbooks/pvpnet-cookbook'
+cookbook 'mysql', git: 'git://github.com/opscode-cookbooks/mysql.git'
+```

@@ -5,30 +5,49 @@ date:   2016-03-24 10:00:00 +0100
 categories: chef
 ---
 
-Original post series was done by this guy
-http://www.jeeatwork.com/?p=102
+Original post series was done by [this guy](http://www.jeeatwork.com/?p=102)
 
-inside of the chef tutorials.
+Main idea is hold all the basics in one place, without googling over and over again.
 
+Pull requests are welcome, this [post is hosted here](https://github.com/mungobungo/mungobungo.github.io)
 
 So plan is basically following:
 
-* create basic cookbook
-  * [holding the knife](#hold_knife)
+* Cookbook basics
+  * [Holding The knife](#hold_knife)
   * [creating cookbook](#create_cookbook)
+  * [How to run simple recipe on Linux](#howto_run_linux")
+  * [How to run simple recipe on Windows](#howto_run_win)
+* [What is attribute?](#attributes)
+  * [How to create an attribute?](#create_attribute)
+  * [How to use attribute inside recipe?](#use_attribute)
+* [How to run cookbook with runlist](#chef_runlist)
+* [How to run several recipes using runlist](#chef_runlist2)
+* [What is template?](#templates_intro)
+  * [How to create a template?](#template_create)
+  * [How to use tempalte from recipe?](#template_use)
+  * [How to use attributes inside templates?](#templates_attributes)
+  * [How to use variables inside templates or IoC_Flavored_Templates](#templates_variables)
+  * [How to create template that uses another template?](#templates_deps)
+* [How to use files inside of recipes?](#files)
+* [What is definition?](#definitions_intro)
+  * [How to create a definition?](#definitions_create)
+* [How to work with cookbook dependencies using Berkshelf?](#berks)
+  * [How to add cookbook dependency?](#berks_add_dep)
+  * [How use recipes from other cookbooks?](#berks_usage)
 
+TBD:
+>* create docker recipe for provisioning
 
-* create docker recipe for provisioning
+>* apply cookbook to docker
 
-* apply cookbook to docker
+>* create vagrant recipe for provisioning
 
-* create vagrant recipe for provisioning
+>* apply cookbook to vagrant
 
-* apply cookbook to vagrant
+>* crate vagrant recipe for ec2
 
-* crate vagrant recipe for ec2
-
-* apply cookbookt to ec2
+>* apply cookbookt to ec2
 
 #  <a name="hold_knife"></a>Holding the knife
 
@@ -256,7 +275,8 @@ You should see following output
 </ul>
 
 ```
-# <a name="template_create"></a> How to create template?
+
+# <a name="template_create"></a> How to create a template?
 
 Let's say we want to generate config file in specified folder with ip of the machine it is run on.
 First we need to create template and put it to [templates folder](https://github.com/mungobungo/cheftutorial/tree/master/templates).
@@ -271,6 +291,7 @@ something like [app.config.erb](https://github.com/mungobungo/cheftutorial/blob/
 ```
 
 # <a name="template_use"></a> How to use tempalte from recipe?
+
 When we have created template, we can use it in our recipes. Something like that
 
 File [config.rb](https://github.com/mungobungo/cheftutorial/blob/master/recipes/config.rb) in [_recipes_ folder](https://github.com/mungobungo/cheftutorial/tree/master/recipes)
@@ -344,12 +365,12 @@ looks like this. take a look at *fromAttribute* field. this one uses user-define
 	<metadata name="recipeName" value = "<%= node['recipes'][0] %>" />
 	<ipaddress value = "<%= node['ipaddress'] %>" />
 	<nodename value = "<%= node['fqdn'] %>" />
-	<fromAttribute value = "<%= node['cheftutorial']['name']%>" />
+	<fromAttribute value = "<%= node['cheftutorial']['name']%>" /> ## here comes the magics
 </connectionStrings>
 
 ```
 
-and our file [config-attribute.rb](https://github.com/mungobungo/cheftutorial/blob/master/recipes/config-attribute.rb)
+And our file [config-attribute.rb](https://github.com/mungobungo/cheftutorial/blob/master/recipes/config-attribute.rb)
 
 Which uses template with attribute in it
 
@@ -394,7 +415,7 @@ Chef Client finished, 1/1 resources updated in 02 seconds
 
 Haleluia , now we know how to mix recipes, attributes and templates.
 
-# <a name="templates_variables"></a> How to use variables inside templates or template IoC?
+# <a name="templates_variables"></a> How to use variables inside templates or IoC_Flavored_Templates
 
 But, I don't really like that templates know about attributes. So, what can we do to inject dependencies?
 And reduce amount of work if we need to update attributes, or rename them or run use different attributes with the same template? Is there a was?
@@ -672,7 +693,7 @@ node['platform']
 >when executed it can show 'windows' or 'ubuntu' or 'fedora' or whatever is considered as a platform
 
 
-# <a name="definitions_intro"></a> What are definitions?
+# <a name="definitions_intro"></a> What is definition?
 
 Now we know a lot. but how those commands are really implemented under the hood?
 how that *log* or *cookbook_file* works?

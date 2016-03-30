@@ -41,7 +41,7 @@ knife cookbook create cheftutorial -o .
 after this we go to cheftutorial\recipes
 and create file welcome.rb
 
-```
+```ruby
 log "Hello #{ENV['USER']}" do
   level :info
 end
@@ -78,7 +78,7 @@ Let's see what can we do with it.
 
 adding new attribute to new file defautl.rb
 
-```
+```ruby
 default["cheftutorial"]["name"] = "babagalamaga"
 
 ```
@@ -153,7 +153,7 @@ Well, let's try
 
 crating new recipe hello.rb at cheftutorial/recipes folder
 
-```
+```ruby
 log "Hello guy someghing #{node['cheftutorial']['name']}" do
    level :info
 end
@@ -201,7 +201,7 @@ something similar to asp.net templates.
 
 here how it look like template.rb
 
-```
+```ruby
 <ul>
 <% 3.times do %>
   <li>list item</li>
@@ -227,7 +227,7 @@ and now see the output
 let's say we want to generate config file in specified folder with ip of the machine it is run on.
 First we need to create template and put it to _templates_ folder. something like "app.config.erb"
 
-```
+```ruby
 <connectionStrings>
 	<metadata name="recipeName" value = "<%= node['recipes'][0] %>" />
 	<ipaddress value = "<%= node['ipaddress'] %>" />
@@ -239,7 +239,7 @@ When we have created template, we can use it in our recipes. Something like that
 
 (file config.rb in _recipes_ folder)
 
-```
+```ruby
 template "/tmp/app.config" do
   source "app.config.erb"
   mode '0440'
@@ -305,7 +305,7 @@ vagrant@vagrant-VirtualBox:~/projects/big_chef$ cat cookbooks/cheftutorial/templ
 
 looks like this. take a look at *fromAttribute* field. this one uses user-defined attribute we've created.
 
-```
+```ruby
 <connectionStrings>
 	<metadata name="recipeName" value = "<%= node['recipes'][0] %>" />
 	<ipaddress value = "<%= node['ipaddress'] %>" />
@@ -323,7 +323,7 @@ vagrant@vagrant-VirtualBox:~/projects/big_chef$ cat cookbooks/cheftutorial/recip
 
 that uses that template with attribute in it
 
-```
+```ruby
 template "/tmp/app-attribute.config" do
   source "app.attribute.config.erb"
   mode '0440'
@@ -387,7 +387,7 @@ our template now looks like this
 and we can use it in recipes.
 Lets create two files with from the same template, but with different variables
 
-```
+```ruby
 template "/tmp/app-variable1.config" do
   source "app.varialble.config.erb"
   variables({
@@ -469,13 +469,13 @@ well, here we go.
 let´s pretend we want all our confing file have some copyright info in the header
 so, here´s header template and we call it.. well, header.rb
 
-```
+```ruby
 <header value = "<%= @info %>" />
 ```
 
 and another template app.headed.config.erb , we incude header using render directive. see the first line of the exmaple
 
-```
+```ruby
 <%= render "header.erb" %>
 
 <connectionStrings>
@@ -490,7 +490,7 @@ and another template app.headed.config.erb , we incude header using render direc
 recipe for using it should be pretty obvious, just don't forget about _info_ variable we need to inject for header template to work properly.
 
 
-```
+```ruby
 template "/tmp/app-headed1.config" do
   source "app.headed.config.erb"
   variables({
@@ -601,7 +601,7 @@ and we put something to the file direclty
 
 and we can use it following way
 
-```
+```ruby
 cookbook_file "file.txt" do
   path "/tmp/file.txt"
   mode "644"
@@ -642,7 +642,7 @@ sidenote- if we're doing cross-platform solutions, we might need to have differe
 
 it can be done using attribute
 
-```
+```ruby
 node['platform']
 ```
 
@@ -658,7 +658,7 @@ to find it out we need to implement something ourselves.
 here we are defining createfile definition. Basically you can think about it as of macro or just function that can be used inside of recipes.
 you can pass parameters there and use them inside of the definition
 
-```
+```ruby
 define :createfile, :path => nil, :content => nil do
   file "#{params[:path]}" do
     content "#{params[:content]}"
@@ -670,12 +670,13 @@ now we can use our own definition in our own recipes.
 just like a bosch. see how paramerers are passed to definition
 
 
-```
+```ruby
 createfile "/tmp/definitonfile.txt" do
    path "/tmp/definitonfile.txt"
    content "Created using definitions"
 end
 ```
+
 if you can spot code duplication here, you're wrong. filename and path are configured in parameter _path_ and that string that goes afer _createfile_ is just name of the step.
 
 executing
@@ -719,7 +720,6 @@ WARNING: No knife configuration file found
 ** Creating README for cookbook: bertut
 ** Creating CHANGELOG for cookbook: bertut
 ** Creating metadata for cookbook: bertut
-
 ```
 
 and make
@@ -816,6 +816,7 @@ mkdir -p /tmp/berks/cookbooks
 ```
 
 2) populate test folder with all the cookbooks and their dependencies
+
 ```
 vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/bertut$ berks vendor /tmp/berks/cookbooks
 Resolving cookbook dependencies...
@@ -829,7 +830,8 @@ Vendoring cheftutorial (0.1.0) to /tmp/berks/cookbooks/cheftutorial
 
 
 3) create file client.rb in test folder
-```
+
+```ruby
 root = File.absolute_path(File.dirname(__FILE__))
 
 berks_cookbook_path = root + 'cookbooks'

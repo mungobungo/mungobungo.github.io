@@ -37,6 +37,7 @@ So plan is basically following:
   * [How use recipes from other cookbooks?](#berks_usage)
 
 TBD:
+
 >* create docker recipe for provisioning
 
 >* apply cookbook to docker
@@ -45,7 +46,7 @@ TBD:
 
 >* apply cookbook to vagrant
 
->* crate vagrant recipe for ec2
+>* crate ec2 recipe
 
 >* apply cookbookt to ec2
 

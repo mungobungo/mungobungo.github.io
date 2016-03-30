@@ -24,7 +24,7 @@ So plan is basically following:c
 
 lets create our big project folder, make it git repo and create cookbooks folder where we will store all our cookbooks
 
-```ShellSession
+```shell
 mkdir big_chef
 cd big_chef
 git init
@@ -51,7 +51,7 @@ and after that you can apply this recipe locally on windows or linux. Which you 
 
 here how it looks on linux box
 
-```ShellSession
+```Shell
 vagrant@vagrant-VirtualBox:~/cheftutorial/recipes$ chef-apply welcome.rb
 Recipe: (chef-apply cookbook)::(chef-apply recipe)
   * log[Hello vagrant] action write

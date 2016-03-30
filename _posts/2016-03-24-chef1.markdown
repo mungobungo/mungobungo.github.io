@@ -196,7 +196,7 @@ Next chapter.  When using chef and or provisioning something you need to create 
 Or html pages. or something like that. doing it by hands is kinda stupid. this is why chef has tempaltes.
 So let's have fun.
 
-Chef uses EMbedded ruby templates (ERB)
+Chef uses [Embedded RuBy templates (ERB)](http://www.stuartellis.eu/articles/erb/))
 
 something similar to asp.net templates.
 
@@ -246,7 +246,7 @@ something like [app.config.erb](https://github.com/mungobungo/cheftutorial/blob/
 
 When we have created template, we can use it in our recipes. Something like that
 
-(file config.rb in _recipes_ folder)
+File [config.rb](https://github.com/mungobungo/cheftutorial/blob/master/recipes/config.rb) in [_recipes_ folder](https://github.com/mungobungo/cheftutorial/tree/master/recipes)
 
 ```ruby
 template "/tmp/app.config" do
@@ -306,13 +306,9 @@ the next logical question comes to my mind now - can we use attributes in our te
 
 Creating new template and recipe to check that
 
-our new template file
+Our new template file [app.attribute.config.erb](https://github.com/mungobungo/cheftutorial/blob/master/templates/app.attribute.config.erb)
 
-```shell
-vagrant@vagrant-VirtualBox:~/projects/big_chef$ cat cookbooks/cheftutorial/templates/app.attribute.config.erb
-```
-
-looks like this. take a look at *fromAttribute* field. this one uses user-defined attribute we've created.
+looks like this. take a look at *fromAttribute* field. this one uses user-defined attribute we've just created.
 
 ```ruby
 <connectionStrings>
@@ -324,11 +320,7 @@ looks like this. take a look at *fromAttribute* field. this one uses user-define
 
 ```
 
-and our file
-
-```shell
-vagrant@vagrant-VirtualBox:~/projects/big_chef$ cat cookbooks/cheftutorial/recipes/config-attribute.rb
-```
+and our file [config-attribute.rb](https://github.com/mungobungo/cheftutorial/blob/master/recipes/config-attribute.rb)
 
 that uses that template with attribute in it
 
@@ -377,11 +369,9 @@ but, i don't really like that templates know about attributes. So, what can we d
 And reduce amount of work if we need to update attributes, or rename them or run use different attributes with the same template? Is there a was?
 For sure. variables to the rescue.
 
-
 our third approach to attributed templates.
 
-
-our template now looks like this
+our template [app.variables.config.erb](https://github.com/mungobungo/cheftutorial/blob/master/templates/app.variables.config.erb) :
 
 ```ruby
 <connectionStrings>
@@ -395,6 +385,8 @@ our template now looks like this
 
 and we can use it in recipes.
 Lets create two files with from the same template, but with different variables
+
+[confg-variables.rb recipe](https://github.com/mungobungo/cheftutorial/blob/master/recipes/config-variables.rb)
 
 ```ruby
 template "/tmp/app-variable1.config" do
@@ -421,8 +413,7 @@ end
 
 ```
 
-
-running it...
+Launching ...
 
 ```shell
 vagrant@vagrant-VirtualBox:~/projects/big_chef$ chef-client --local-mode --runlist "recipe[cheftutorial::config-variables]"
@@ -468,20 +459,20 @@ Running handlers complete
 Chef Client finished, 2/2 resources updated in 02 seconds
 ```
 
-coool.
+Coool.
 
-but still, what if we want to use several templates that depends on each other? like header and other components?
+But still, what if we want to use several templates that depends on each other? like header and other components?
 well, here we go.
 
 
-let´s pretend we want all our confing file have some copyright info in the header
-so, here´s header template and we call it.. well, header.rb
+Let´s pretend we want all our confing file have some copyright info in the header
+So, here´s header template and we call it.. well, [header.rb](https://github.com/mungobungo/cheftutorial/blob/master/templates/header.erb)
 
 ```ruby
 <header value = "<%= @info %>" />
 ```
 
-and another template app.headed.config.erb , we incude header using render directive. see the first line of the exmaple
+and another template [app.headed.config.erb](https://github.com/mungobungo/cheftutorial/blob/master/templates/app.headed.config.erb) , we incude header using render directive. see the first line of the example
 
 ```ruby
 <%= render "header.erb" %>
@@ -497,6 +488,7 @@ and another template app.headed.config.erb , we incude header using render direc
 
 recipe for using it should be pretty obvious, just don't forget about _info_ variable we need to inject for header template to work properly.
 
+[config-headed.rb recipe](https://github.com/mungobungo/cheftutorial/blob/master/recipes/config-headed.rb)
 
 ```ruby
 template "/tmp/app-headed1.config" do
@@ -581,13 +573,13 @@ I think this is more then enough for now so we will leave templates and attribut
 
 quick recap:
 
-## recipes are like programs or modules or functions that can get stuff done
+* recipes are like programs or modules or functions that can get stuff done
 
-## attributes are like metadata variables, for stuff you want share between recipes and do not want to hardcode
+* attributes are like metadata variables, for stuff you want share between recipes and do not want to hardcode
 
-## templates are like, well, templates. it can be used in recipes to generate fiels based on that templates.
+* templates are like, well, templates. it can be used in recipes to generate fiels based on that templates.
 
-## best practice is not to use attributes directly from templates. let the recipes to inject proper values to the template
+* best practice is not to use attributes directly from templates. let the recipes to inject proper values to the template
 
 
 
@@ -603,11 +595,13 @@ vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/cheftutorial/files$ cat
 
 gives us
 
-```
+```shell
 and we put something to the file direclty
 ```
 
 and we can use it following way
+
+[file-creation.rb recipe](https://github.com/mungobungo/cheftutorial/blob/master/recipes/file-creation.rb)
 
 ```ruby
 cookbook_file "file.txt" do
@@ -646,18 +640,18 @@ Chef Client finished, 1/1 resources updated in 02 seconds
 ```
 
 
-sidenote- if we're doing cross-platform solutions, we might need to have different configs for different platforms
-
-it can be done using attribute
+> if we're doing cross-platform solutions, we might need to have different configs for different platforms.
+It can be done using following attribute
 
 ```ruby
 node['platform']
 ```
 
-when executed it can show 'windows' or 'ubuntu' or 'fedora' or whatever is considered as a platform
+>when executed it can show 'windows' or 'ubuntu' or 'fedora' or whatever is considered as a platform
 
 
 #creating _definitions_
+
 Now we know a lot. but how those commands are really implemented under the hood?
 how that *log* or *cookbook_file* works?
 
@@ -665,6 +659,10 @@ to find it out we need to implement something ourselves.
 
 here we are defining createfile definition. Basically you can think about it as of macro or just function that can be used inside of recipes.
 you can pass parameters there and use them inside of the definition
+
+Definitions are stored, as you can already guess in [definitions folder](https://github.com/mungobungo/cheftutorial/blob/master/definitions/)
+
+We will add our own [file-definition.rb definition](https://github.com/mungobungo/cheftutorial/blob/master/definitions/file-definition.rb)
 
 ```ruby
 define :createfile, :path => nil, :content => nil do
@@ -674,9 +672,10 @@ define :createfile, :path => nil, :content => nil do
 end
 ```
 
-now we can use our own definition in our own recipes.
-just like a bosch. see how paramerers are passed to definition
+Now we can use our own definition in our own recipes.
+just like a (Bosch)[https://en.wikipedia.org/wiki/The_Garden_of_Earthly_Delights]. see how parameters are passed to definition
 
+[file-def.rb recipe](https://github.com/mungobungo/cheftutorial/blob/master/recipes/file-def.rb)
 
 ```ruby
 createfile "/tmp/definitonfile.txt" do
@@ -685,9 +684,8 @@ createfile "/tmp/definitonfile.txt" do
 end
 ```
 
-if you can spot code duplication here, you're wrong. filename and path are configured in parameter _path_ and that string that goes afer _createfile_ is just name of the step.
-
-executing
+If you think you see code duplication here, you're wrong.
+filename and path are configured in parameter _path_ and that string that goes afer _createfile_ is just name of the step.
 
 ```shell
 vagrant@vagrant-VirtualBox:~/projects/big_chef$ chef-client --local-mode --runlist "recipe[cheftutorial::file-def]"
@@ -715,11 +713,11 @@ Chef Client finished, 1/1 resources updated in 02 seconds
 
 # Berks.
 
-used to more easy work with cookbook dependencies.
+Used to more easy work with cookbook dependencies.
 
-mostly stolen from here [http://www.jeeatwork.com/?p=108]
+mostly stolen from [here](http://www.jeeatwork.com/?p=108)
 
-let's create new cookbook
+let's create new cookbook called [bertut](https://github.com/mungobungo/bertut.git)
 
 ```shell
 vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks$ knife cookbook create bertut -o .
@@ -762,7 +760,7 @@ rm -fr .git
 
 let's add dependency to other cookbook from the supermarket.
 
-for that open Berksfile and add cookbook dependency,  our good fellow from  previous execrices
+for that open [Berksfile](https://github.com/mungobungo/bertut/blob/master/Berksfile) and add cookbook dependency,  our good fellow from  previous execrices
 
 
 ```ruby
@@ -773,7 +771,7 @@ metadata
 cookbook 'cheftutorial', git: 'https://github.com/mungobungo/cheftutorial.git'
 ```
 
-and patch metadata.rb file with dependency
+and patch [metadata.rb](https://github.com/mungobungo/bertut/blob/master/metadata.rb) file with dependency
 
 ```ruby
 name             'bertut'
@@ -788,7 +786,7 @@ depends 'cheftutorial'
 ```
 
 
-this is how you can use recipes from other cookbooks (inside default.rb or any other recipe)
+this is how you can use recipes from other cookbooks (inside [default.rb](https://github.com/mungobungo/bertut/blob/master/recipes/default.rb) or any other recipe)
 
 ```ruby
 include_recipe "cheftutorial::config-headed"
@@ -817,13 +815,14 @@ Using cheftutorial (0.1.0) from https://github.com/mungobungo/cheftutorial.git (
 now comes tricky stuff. we cannot test anymore the way we did before..
 so.
 (this can be also automated via chef)
-1) create folder for testing
+
+* create folder for testing
 
 ```shell
 mkdir -p /tmp/berks/cookbooks
 ```
 
-2) populate test folder with all the cookbooks and their dependencies
+* populate test folder with all the cookbooks and their dependencies
 
 ```shell
 vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/bertut$ berks vendor /tmp/berks/cookbooks
@@ -837,7 +836,7 @@ Vendoring cheftutorial (0.1.0) to /tmp/berks/cookbooks/cheftutorial
 ```
 
 
-3) create file client.rb in test folder
+* create file client.rb in test folder
 
 ```ruby
 root = File.absolute_path(File.dirname(__FILE__))
@@ -904,4 +903,18 @@ cookbook 'memcached'
 cookbook 'nginx'
 ```
 
-those books would be taken from supermarket
+those books would be taken from [Chef Supermarket](https://supermarket.chef.io/)
+
+For example, you can install PostgreSql server to Ubuntu just using this simple recipe
+
+```ruby
+include_recipe postgresql::server
+```
+
+It will install the postgresql server packages and sets up the service. Also it will
+* generates a strong default password (via openssl) for postgres
+* sets the password for postgres
+* manages the postgresql.conf file.
+* manages the pg_hba.conf file.
+
+Kinda nice for a single line of code heh. )

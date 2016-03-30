@@ -912,9 +912,13 @@ include_recipe postgresql::server
 ```
 
 It will install the postgresql server packages and sets up the service. Also it will
+
 * generates a strong default password (via openssl) for postgres
-* sets the password for postgres
-* manages the postgresql.conf file.
-* manages the pg_hba.conf file.
+
+* set the password for postgres
+
+* manage the postgresql.conf file.
+
+* manage the pg_hba.conf file.
 
 Kinda nice for a single line of code heh. )

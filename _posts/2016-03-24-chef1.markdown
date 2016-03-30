@@ -34,7 +34,7 @@ cd cookbooks
 
 now we can  create cookbook. this is done via
 
-```ShellSession
+```shell
 knife cookbook create cheftutorial -o .
 ```
 
@@ -51,7 +51,7 @@ and after that you can apply this recipe locally on windows or linux. Which you 
 
 here how it looks on linux box
 
-```Shell
+```shell
 vagrant@vagrant-VirtualBox:~/cheftutorial/recipes$ chef-apply welcome.rb
 Recipe: (chef-apply cookbook)::(chef-apply recipe)
   * log[Hello vagrant] action write
@@ -61,7 +61,7 @@ Recipe: (chef-apply cookbook)::(chef-apply recipe)
 
 and here's snaphost of windows output
 
-```
+```powershell
 C:\Users\otaykalo\projects\bigchef\cheftutorial> chef-apply .\recipes\welcom.rb
 Recipe: (chef-apply cookbook)::(chef-apply recipe)
   * log[Hello otaykalo] action write
@@ -85,7 +85,7 @@ default["cheftutorial"]["name"] = "babagalamaga"
 
 and use it from welcome message
 
-```
+```ruby
 log "Hello #{ENV['USER']}" do
   level :info
 end
@@ -98,7 +98,7 @@ end
 
 now if you try it to run in old way, youll get an error
 
-```
+```shell
 chef-apply recipes/welcome.rb
 [2016-03-24T10:58:31+01:00] FATAL: Stacktrace dumped to /home/vagrant/.chef/cache/chef-stacktrace.out
 [2016-03-24T10:58:31+01:00] FATAL: Please provide the contents of the stacktrace.out file if you file a bug report

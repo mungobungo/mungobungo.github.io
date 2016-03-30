@@ -35,6 +35,7 @@ So plan is basically following:
 * [How to work with cookbook dependencies using Berkshelf?](#berks)
   * [How to add cookbook dependency?](#berks_add_dep)
   * [How use recipes from other cookbooks?](#berks_usage)
+  * [How to reference cookbooks from different locations?](#berks_ref)
 
 TBD:
 
@@ -983,6 +984,7 @@ It will install the postgresql server packages and sets up the service. Also it 
 
 Kinda nice for a single line of code heh. )
 
+# <a name="berks_ref"></a> How to reference cookbooks from different locations?
 
 And of course you can reference cookbooks not only from Supermarket
 

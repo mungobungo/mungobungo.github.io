@@ -12,17 +12,18 @@ inside of the chef tutorials.
 
 
 So plan is basically following:c
-# create basic cookbook
-# apply cookbook to local linux
-# create docker recipe for provisioning
-# apply cookbook to docker
-# create vagrant recipe for provisioning
-# apply cookbook to vagrant
-# crate vagrant recipe for ec2
-# apply cookbookt to ec2
+* create basic cookbook
+* apply cookbook to local linux
+* create docker recipe for provisioning
+* apply cookbook to docker
+* create vagrant recipe for provisioning
+* apply cookbook to vagrant
+* crate vagrant recipe for ec2
+* apply cookbookt to ec2
 
+## Holding the knife
 
-lets create our big project folder, make it git repo and create cookbooks folder where we will store all our cookbooks
+Let's create our big project folder, make it [Chef tutorial git repo](https://github.com/mungobungo/cheftutorial.git) and create cookbooks folder where we will store all our cookbooks
 
 ```shell
 mkdir big_chef
@@ -32,14 +33,14 @@ mkdir cookbooks
 cd cookbooks
 ```
 
-now we can  create cookbook. this is done via
+Now we can create cookbook. this is done via
 
 ```shell
 knife cookbook create cheftutorial -o .
 ```
 
-after this we go to cheftutorial\recipes
-and create file welcome.rb
+after this we go to [cheftutorial\recipes](https://github.com/mungobungo/cheftutorial/tree/master/recipes)
+and create file [welcome.rb](https://github.com/mungobungo/cheftutorial/blob/master/recipes/welcome.rb)
 
 ```ruby
 log "Hello #{ENV['USER']}" do
@@ -72,18 +73,19 @@ looks pretty similar, which is nice.
 
 So now we can go further. To share information between recipes whe can use *attributes*
 
-attributes are stored in files indide _attributes_ directory. Pretty logical also
+attributes are stored in files indide [attributes directory](https://github.com/mungobungo/cheftutorial/tree/master/attributes)  
+Pretty logical also
 
 Let's see what can we do with it.
 
-adding new attribute to new file defautl.rb
+adding new attribute to new file [defautl.rb](https://github.com/mungobungo/cheftutorial/blob/master/attributes/default.rb)
 
 ```ruby
 default["cheftutorial"]["name"] = "babagalamaga"
 
 ```
 
-and use it from welcome message
+and use it from [welcome.rb recipe](https://github.com/mungobungo/cheftutorial/blob/master/recipes/welcome.rb)
 
 ```ruby
 log "Hello #{ENV['USER']}" do
@@ -96,7 +98,7 @@ end
 
 ```
 
-now if you try it to run in old way, youll get an error
+now if you try it to run in old way, you'll get an error
 
 ```shell
 chef-apply recipes/welcome.rb
@@ -110,23 +112,22 @@ This happens because we're trying to run chef in plain _one-and-only-recipy-mode
 
 So how can we fix it?
 
-first of all, lets get back to ourt root bigchef folder
+first of all, lets get back to our root bigchef folder
 
-```
+```shell
 cd ~/bigchef
 ```
 
 and run
 
-```
+```shell
 chef-client --local-mode --runlist "recipe[cheftutorial::welcome]"
-
 ```
 
 
 Output should be something like this
 
-```
+```shell
 vagrant@vagrant-VirtualBox:~/projects/big_chef$ chef-client --local-mode --runlist "recipe[cheftutorial::welcome]"
 [2016-03-24T11:06:40+01:00] WARN: No config file found or specified on command line, using command line options.
 Starting Chef Client, version 12.6.0
@@ -151,7 +152,7 @@ so far so good. But what if we want to run several recipes at once?
 
 Well, let's try
 
-crating new recipe hello.rb at cheftutorial/recipes folder
+crating new recipe [hello.rb](https://github.com/mungobungo/cheftutorial/blob/master/recipes/hello.rb) at [cheftutorial/recipes](https://github.com/mungobungo/cheftutorial/tree/master/recipes) folder
 
 ```ruby
 log "Hello guy someghing #{node['cheftutorial']['name']}" do
@@ -162,13 +163,13 @@ end
 
 and run chef-apply again from root folder of the project (*not* cheftutorial folder)
 
-```
+```shell
 vagrant@vagrant-VirtualBox:~/projects/big_chef$ chef-client --local-mode --runlist "cheftutorial::welcome,cheftutorial::hello"
 ```
 
 as you can see, you can specify as many recipes as you want. this is why it is called runLIST.
 
-```
+```shell
 [2016-03-24T11:28:30+01:00] WARN: No config file found or specified on command line, using command line options.
 Starting Chef Client, version 12.6.0
 resolving cookbooks for run list: ["cheftutorial::welcome", "cheftutorial::hello"]
@@ -199,7 +200,8 @@ Chef uses EMbedded ruby templates (ERB)
 
 something similar to asp.net templates.
 
-here how it look like template.rb
+Templates are stored in... yeah. [templates folder](https://github.com/mungobungo/cheftutorial/tree/master/templates)
+here how it look sometghing like template.rb
 
 ```ruby
 <ul>
@@ -209,9 +211,15 @@ here how it look like template.rb
 </ul>
 ```
 
-and now see the output
+if you run
 
+```shell
+ruby template.rb
 ```
+
+You should see following output
+
+```html
 <ul>
 
   <li>list item</li>
@@ -225,7 +233,8 @@ and now see the output
 ```
 
 let's say we want to generate config file in specified folder with ip of the machine it is run on.
-First we need to create template and put it to _templates_ folder. something like "app.config.erb"
+First we need to create template and put it to [templates folder](https://github.com/mungobungo/cheftutorial/tree/master/templates).
+something like [app.config.erb](https://github.com/mungobungo/cheftutorial/blob/master/templates/app.config.erb)
 
 ```ruby
 <connectionStrings>
@@ -250,7 +259,7 @@ the code basically says that recipe will create file located in "/tmp/app.config
 
 Everything seems to be ready, so let's launch
 
-```
+```shell
 vagrant@vagrant-VirtualBox:~/projects/big_chef$ chef-client --local-mode --runlist "recipe[cheftutorial::config]"
 [2016-03-24T14:16:50+01:00] WARN: No config file found or specified on command line, using command line options.
 Starting Chef Client, version 12.6.0
@@ -281,7 +290,7 @@ Chef Client finished, 1/1 resources updated in 02 seconds
 
 Polite chef even shows the content of newly generated file. But let's do double check.
 
-```
+```shell
 vagrant@vagrant-VirtualBox:~/projects/big_chef$ cat /tmp/app.config
 <connectionStrings>
 	<metadata name="recipeName" value = "cheftutorial::config" />
@@ -299,7 +308,7 @@ Creating new template and recipe to check that
 
 our new template file
 
-```
+```shell
 vagrant@vagrant-VirtualBox:~/projects/big_chef$ cat cookbooks/cheftutorial/templates/app.attribute.config.erb
 ```
 
@@ -317,7 +326,7 @@ looks like this. take a look at *fromAttribute* field. this one uses user-define
 
 and our file
 
-```
+```shell
 vagrant@vagrant-VirtualBox:~/projects/big_chef$ cat cookbooks/cheftutorial/recipes/config-attribute.rb
 ```
 
@@ -332,7 +341,7 @@ end
 
 running it...
 
-```
+```shell
 vagrant@vagrant-VirtualBox:~/projects/big_chef$ chef-client --local-mode --runlist "recipe[cheftutorial::config-attribute]"
 [2016-03-24T14:35:06+01:00] WARN: No config file found or specified on command line, using command line options.
 Starting Chef Client, version 12.6.0
@@ -374,7 +383,7 @@ our third approach to attributed templates.
 
 our template now looks like this
 
-```
+```ruby
 <connectionStrings>
         <metadata name="recipeName" value = "<%= @recipe %>" />
         <ipaddress value = "<%= @ipaddress %>" />
@@ -415,7 +424,7 @@ end
 
 running it...
 
-```
+```shell
 vagrant@vagrant-VirtualBox:~/projects/big_chef$ chef-client --local-mode --runlist "recipe[cheftutorial::config-variables]"
 [2016-03-24T15:09:19+01:00] WARN: No config file found or specified on command line, using command line options.
 Starting Chef Client, version 12.6.0
@@ -457,7 +466,6 @@ Recipe: cheftutorial::config-variables
 Running handlers:
 Running handlers complete
 Chef Client finished, 2/2 resources updated in 02 seconds
-
 ```
 
 coool.
@@ -519,7 +527,7 @@ end
 
 And running example
 
-```
+```shell
 vagrant@vagrant-VirtualBox:~/projects/big_chef$ chef-client --local-mode --runlist "recipe[cheftutorial::config-headed]"
 [2016-03-24T15:44:18+01:00] WARN: No config file found or specified on command line, using command line options.
 Starting Chef Client, version 12.6.0
@@ -589,7 +597,7 @@ files are simple. Those are just templates but without parameters. simple goold 
 
 files are created in files folder of cookbook. easy to remember heh..
 
-```
+```shell
 vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/cheftutorial/files$ cat file.txt
 ```
 
@@ -611,7 +619,7 @@ end
 
 and ouput will be like this
 
-```
+```shell
 vagrant@vagrant-VirtualBox:~/projects/big_chef$ chef-client --local-mode --runlist "recipe[cheftutorial::file-creation]"
 [2016-03-24T16:35:18+01:00] WARN: No config file found or specified on command line, using command line options.
 Starting Chef Client, version 12.6.0
@@ -681,7 +689,7 @@ if you can spot code duplication here, you're wrong. filename and path are confi
 
 executing
 
-```
+```shell
 vagrant@vagrant-VirtualBox:~/projects/big_chef$ chef-client --local-mode --runlist "recipe[cheftutorial::file-def]"
 [2016-03-24T16:51:51+01:00] WARN: No config file found or specified on command line, using command line options.
 Starting Chef Client, version 12.6.0
@@ -713,7 +721,7 @@ mostly stolen from here [http://www.jeeatwork.com/?p=108]
 
 let's create new cookbook
 
-```
+```shell
 vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks$ knife cookbook create bertut -o .
 WARNING: No knife configuration file found
 ** Creating cookbook bertut in /home/vagrant/projects/big_chef/cookbooks
@@ -724,7 +732,7 @@ WARNING: No knife configuration file found
 
 and make
 
-```
+```shell
 vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/bertut$ berks init
       create  Berksfile
       create  Thorfile
@@ -748,7 +756,7 @@ Successfully initialized
 
 afteward we need to remove .git folder, because our bertut is already under source control of bigger project
 
-```
+```shell
 rm -fr .git
 ```
 
@@ -757,7 +765,7 @@ let's add dependency to other cookbook from the supermarket.
 for that open Berksfile and add cookbook dependency,  our good fellow from  previous execrices
 
 
-```
+```ruby
 source "https://supermarket.chef.io"
 
 metadata
@@ -767,7 +775,7 @@ cookbook 'cheftutorial', git: 'https://github.com/mungobungo/cheftutorial.git'
 
 and patch metadata.rb file with dependency
 
-```
+```ruby
 name             'bertut'
 maintainer       'YOUR_COMPANY_NAME'
 maintainer_email 'YOUR_EMAIL'
@@ -782,13 +790,13 @@ depends 'cheftutorial'
 
 this is how you can use recipes from other cookbooks (inside default.rb or any other recipe)
 
-```
+```ruby
 include_recipe "cheftutorial::config-headed"
 ```
 
 after that we should run
 
-```
+```shell
 berks install
 ```
 
@@ -796,7 +804,7 @@ that will download all referenced cookbooks to local folder of 'bertut' book
 
 'berks install' should be run in root folder of 'bertut' cookbook
 
-```
+```shell
 vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/bertut$ berks install
 Resolving cookbook dependencies...
 Fetching 'bertut' from source at .
@@ -811,13 +819,13 @@ so.
 (this can be also automated via chef)
 1) create folder for testing
 
-```
+```shell
 mkdir -p /tmp/berks/cookbooks
 ```
 
 2) populate test folder with all the cookbooks and their dependencies
 
-```
+```shell
 vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/bertut$ berks vendor /tmp/berks/cookbooks
 Resolving cookbook dependencies...
 Fetching 'bertut' from source at .
@@ -841,7 +849,7 @@ cookbook_path = berks_cookbook_path
 
 4) run the recipe
 
-```
+```shell
 vagrant@vagrant-VirtualBox:/tmp/berks$ chef-client -c $PWD/client.rb --local-mode --runlist "recipe[bertut::default]"
 Starting Chef Client, version 12.6.0
 resolving cookbooks for run list: ["bertut::default"]
@@ -891,7 +899,7 @@ Chef Client finished, 2/2 resources updated in 02 seconds
 
 also, references to other cookbooks could be also added to Berksfile
 
-```
+```ruby
 cookbook 'memcached'
 cookbook 'nginx'
 ```

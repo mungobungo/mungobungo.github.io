@@ -5,8 +5,10 @@ date:   2016-03-31 11:12:00 +0100
 categories: chef
 ---
 
-While previous part was
-Original post series was done by [this guy](http://www.jeeatwork.com/?p=102)
+While previous part was mosnly about recipes and basics, this goes to the next level.
+Creating virtual machines using chef-provisioning and provisioning them with our chef recipes.
+
+also here some intro to chef provisioning [vagrant provs](https://gist.github.com/dergachev/3866825)
 
 Main idea is hold all the basics in one place, without googling over and over again.
 
@@ -178,4 +180,73 @@ The way you specify which one to use are environment variables.
 ```
 export CHEF_DRIVER=vagrant
 export VAGRANT_DEFAULT_PROVIDER=virtualbox
+```
+
+Now we need to add some box to play with
+
+```
+vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/chef_vagrant_provision$ vagrant box add hashicorp/precise64
+==> box: Loading metadata for box 'hashicorp/precise64'
+    box: URL: https://atlas.hashicorp.com/hashicorp/precise64
+This box can work with multiple providers! The providers that it
+can work with are listed below. Please review the list and choose
+the provider you will be working with.
+
+1) hyperv
+2) virtualbox
+3) vmware_fusion
+
+Enter your choice: 2
+==> box: Adding box 'hashicorp/precise64' (v1.1.0) for provider: virtualbox
+    box: Downloading: https://atlas.hashicorp.com/hashicorp/boxes/precise64/versions/1.1.0/providers/virtualbox.box
+==> box: Successfully added box 'hashicorp/precise64' (v1.1.0) for 'virtualbox'!
+```
+
+
+trying to run
+
+```
+vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/chef_vagrant_provision$ chef-client -z recipes/simple_machine.rb
+
+....many lines here...
+
+
+STDOUT:Bringing machine 'marley' up with 'virtualbox' provider...
+==> marley: Checking if box 'hashicorp/precise64' is up to date...
+==> marley: Clearing any previously set forwarded ports...
+==> marley: Clearing any previously set network interfaces...
+==> marley: Preparing network interfaces based on configuration...
+    marley: Adapter 1: nat
+==> marley: Forwarding ports...
+    marley: 22 (guest) => 2222 (host) (adapter 1)
+==> marley: Running 'pre-boot' VM customizations...
+==> marley: Booting VM...
+==> marley: Waiting for machine to boot. This may take a few minutes...
+
+STDERR:The guest machine entered an invalid state while waiting for it
+to boot. Valid states are 'starting, running'. The machine is in the
+'poweroff' state. Please verify everything is configured
+properly and try again.
+
+```
+
+hmm maybe we should run vagrant up to see what causes the problem
+
+```
+vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/chef_vagrant_provision$ vagrant up
+Bringing machine 'default' up with 'virtualbox' provider...
+==> default: Box 'chef/ubuntu-14.04' could not be found. Attempting to find and install...
+    default: Box Provider: virtualbox
+    default: Box Version: >= 0
+==> default: Loading metadata for box 'chef/ubuntu-14.04'
+    default: URL: https://atlas.hashicorp.com/chef/ubuntu-14.04
+The box you're adding has a name different from the name you
+requested. For boxes with metadata, you cannot override the name.
+If you're adding a box using `vagrant box add`, don't specify
+the `--name` parameter. If the box is being added via a Vagrantfile,
+change the `config.vm.box` value to match the name below.
+
+Requested name: chef/ubuntu-14.04
+Actual name: bento/ubuntu-14.04
+
 ```

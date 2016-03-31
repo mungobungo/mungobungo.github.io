@@ -1,0 +1,119 @@
+---
+layout: post
+title:  "chef  tutorial p2."
+date:   2016-03-31 11:12:00 +0100
+categories: chef
+---
+
+While previous part was
+Original post series was done by [this guy](http://www.jeeatwork.com/?p=102)
+
+Main idea is hold all the basics in one place, without googling over and over again.
+
+Pull requests are welcome, this [post is hosted here](https://github.com/mungobungo/mungobungo.github.io)
+
+So plan is basically following:
+
+* [Preparation?](#preparation)
+  * [How to install chef-provisioning?](#chef_provisioning_install)
+  * [How to use attribute inside recipe?](#use_attribute)
+
+Creating cookbook as usual
+
+```shell
+vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks$ knife cookbook create chef_vagrant_provision -o .
+WARNING: No knife configuration file found
+** Creating cookbook chef_vagrant_provision in /home/vagrant/projects/big_chef/cookbooks
+** Creating README for cookbook: chef_vagrant_provision
+** Creating CHANGELOG for cookbook: chef_vagrant_provision
+** Creating metadata for cookbook: chef_vagrant_provision
+vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks$ ls
+bertut  cheftutorial  chef_vagrant_provision
+vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks$ cd chef_vagrant_provision/
+vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/chef_vagrant_provision$ ls
+attributes  CHANGELOG.md  definitions  files  libraries  metadata.rb  providers  README.md  recipes  resources  templates
+```
+
+initializing berks
+
+```shell
+vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/chef_vagrant_provision$ berks init
+      create  Berksfile
+      create  Thorfile
+      create  chefignore
+      create  .gitignore
+      create  Gemfile
+      create  .kitchen.yml
+    conflict  chefignore
+Overwrite /home/vagrant/projects/big_chef/cookbooks/chef_vagrant_provision/chefignore? (enter "h" for help) [Ynaqdh] y
+       force  chefignore
+      append  Thorfile
+      create  test/integration/default
+      append  .gitignore
+      append  .gitignore
+      append  Gemfile
+      append  Gemfile
+You must run `bundle install' to fetch any new gems.
+      create  Vagrantfile
+Successfully initialized
+```
+
+fetching gems, so all can run smoothly
+
+```shell
+vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/chef_vagrant_provision$ bundle install
+Fetching gem metadata from https://rubygems.org/........
+Fetching version metadata from https://rubygems.org/...
+Fetching dependency metadata from https://rubygems.org/..
+Resolving dependencies...
+Using addressable 2.4.0
+Using multipart-post 2.0.0
+Using faraday 0.9.2
+Using httpclient 2.7.1
+Using buff-extensions 1.0.0
+Using hashie 3.4.3
+Installing varia_model 0.4.1
+Using buff-config 1.0.1
+Using buff-ignore 1.1.1
+Using buff-ruby_engine 0.1.0
+Using buff-shell_out 0.2.0
+Using hitimes 1.2.3
+Using timers 4.0.4
+Using celluloid 0.16.0
+Installing nio4r 1.2.1
+Using celluloid-io 0.16.2
+Using mixlib-config 2.2.1
+Using mixlib-shellout 2.2.6
+Using chef-config 12.8.1
+Using erubis 2.7.0
+Using json 1.8.3
+Using mixlib-log 1.6.0
+Using rspec-support 3.4.1
+Using rspec-core 3.4.4
+Using diff-lcs 1.2.5
+Using rspec-expectations 3.4.0
+Using rspec-mocks 3.4.1
+Using mixlib-authentication 1.4.0
+Using retryable 2.0.3
+Using semverse 1.2.1
+Installing ridley 4.5.0
+Installing berkshelf-api-client 2.0.2
+Using cleanroom 1.0.0
+Using minitar 0.5.4
+Installing sawyer 0.7.0
+Installing octokit 4.3.0
+Installing molinillo 0.4.4
+Installing solve 2.0.3
+Using thor 0.19.1
+Installing berkshelf 4.3.1
+Using mixlib-install 0.7.1
+Installing net-ssh 3.1.1
+Using net-scp 1.2.1
+Using safe_yaml 1.0.4
+Installing test-kitchen 1.6.0
+Using kitchen-vagrant 0.19.0
+Using bundler 1.8.4
+Bundle complete! 3 Gemfile dependencies, 47 gems now installed.
+Use `bundle show [gemname]` to see where a bundled gem is installed.
+
+```

@@ -14,10 +14,12 @@ Pull requests are welcome, this [post is hosted here](https://github.com/mungobu
 
 So plan is basically following:
 
-* [Preparation?](#preparation)
-  * [How to install chef-provisioning?](#chef_provisioning_install)
+* [Preparation](#preparation)
+  * [Create cookbook?](#create_cookbook)
   * [How to use attribute inside recipe?](#use_attribute)
 
+## <a name="preparation"> </a> Preparation
+# <a name="create_cookbook"> </a> Creation cookbook
 Creating cookbook as usual
 
 ```shell
@@ -34,6 +36,7 @@ vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/chef_vagrant_provision$
 attributes  CHANGELOG.md  definitions  files  libraries  metadata.rb  providers  README.md  recipes  resources  templates
 ```
 
+# <a name="initiate_berks"> </a> Initialize berks
 initializing berks
 
 ```shell
@@ -58,6 +61,7 @@ You must run `bundle install' to fetch any new gems.
 Successfully initialized
 ```
 
+# <a name="install_bundler"> </a> Fetching berks gems
 fetching gems, so all can run smoothly
 
 ```shell
@@ -67,53 +71,111 @@ Fetching version metadata from https://rubygems.org/...
 Fetching dependency metadata from https://rubygems.org/..
 Resolving dependencies...
 Using addressable 2.4.0
-Using multipart-post 2.0.0
-Using faraday 0.9.2
-Using httpclient 2.7.1
-Using buff-extensions 1.0.0
-Using hashie 3.4.3
-Installing varia_model 0.4.1
-Using buff-config 1.0.1
-Using buff-ignore 1.1.1
-Using buff-ruby_engine 0.1.0
-Using buff-shell_out 0.2.0
-Using hitimes 1.2.3
-Using timers 4.0.4
-Using celluloid 0.16.0
-Installing nio4r 1.2.1
-Using celluloid-io 0.16.2
-Using mixlib-config 2.2.1
-Using mixlib-shellout 2.2.6
-Using chef-config 12.8.1
-Using erubis 2.7.0
-Using json 1.8.3
-Using mixlib-log 1.6.0
-Using rspec-support 3.4.1
-Using rspec-core 3.4.4
-Using diff-lcs 1.2.5
-Using rspec-expectations 3.4.0
-Using rspec-mocks 3.4.1
-Using mixlib-authentication 1.4.0
-Using retryable 2.0.3
-Using semverse 1.2.1
-Installing ridley 4.5.0
-Installing berkshelf-api-client 2.0.2
-Using cleanroom 1.0.0
-Using minitar 0.5.4
-Installing sawyer 0.7.0
-Installing octokit 4.3.0
-Installing molinillo 0.4.4
-Installing solve 2.0.3
-Using thor 0.19.1
-Installing berkshelf 4.3.1
-Using mixlib-install 0.7.1
-Installing net-ssh 3.1.1
-Using net-scp 1.2.1
-Using safe_yaml 1.0.4
-Installing test-kitchen 1.6.0
-Using kitchen-vagrant 0.19.0
+......
+  many more lines here
+......
 Using bundler 1.8.4
 Bundle complete! 3 Gemfile dependencies, 47 gems now installed.
 Use `bundle show [gemname]` to see where a bundled gem is installed.
+```
 
+
+# <a name="install_vagrant_berkshelf"> </a> Installing vagrant-berkshelf plugin
+```
+vagrant plugin install vagrant-berkshelf
+Installing the 'vagrant-berkshelf' plugin. This can take a few minutes...
+Installed the plugin 'vagrant-berkshelf (4.1.0)'!
+Post install message from the 'vagrant-berkshelf' plugin:
+
+The Vagrant Berkshelf plugin requires Berkshelf from the Chef Development Kit.
+You can download the latest version of the Chef Development Kit from:
+
+   https://downloads.chef.io/chef-dk/
+
+Installing Berkshelf via other methods is not officially supported.
+
+```
+
+# <a name="install_chef_provisioning"> </a> Installing chef provisioning for vagrant
+Preparing chef vagrant-provisioning  tools
+
+```
+gem install chef-provisioning chef-provisioning-vagrant
+Fetching: chef-provisioning-1.6.0.gem (100%)
+Successfully installed chef-provisioning-1.6.0
+Parsing documentation for chef-provisioning-1.6.0
+Installing ri documentation for chef-provisioning-1.6.0
+Done installing documentation for chef-provisioning after 4 seconds
+Successfully installed chef-provisioning-vagrant-0.11.0
+Parsing documentation for chef-provisioning-vagrant-0.11.0
+Done installing documentation for chef-provisioning-vagrant after 0 seconds
+2 gems installed
+```
+
+
+Trying to run vagrant..
+
+```
+vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/chef_vagrant_provision$ vagrant
+Failed to load the "vagrant-berkshelf" plugin. View logs for more details.
+
+Vagrant failed to initialize at a very early stage:
+
+This Vagrant environment has specified that it requires the Vagrant
+version to satisfy the following version requirements:
+
+  >= 1.5.0
+
+You are running Vagrant 1.4.3, which does not satisify
+these requirements. Please change your Vagrant version or update
+the Vagrantfile to allow this Vagrant version. However, be warned
+that if the Vagrantfile has specified another version, it probably has
+good reason to do so, and changing that may cause the environment to
+not function properly.
+```
+
+So, we need to update vagrant to specific version.
+Easiest way to do so, go to [Vagrant site](https://www.vagrantup.com/downloads.html) and grab installation package.
+
+```
+vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/chef_vagrant_provision$ wget https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1_x86_64.deb
+--2016-03-31 15:55:09--  https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1_x86_64.deb
+Resolving releases.hashicorp.com (releases.hashicorp.com)... 23.235.43.69
+Connecting to releases.hashicorp.com (releases.hashicorp.com)|23.235.43.69|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 75496368 (72M) [application/x-debian-package]
+Saving to: ‘vagrant_1.8.1_x86_64.deb’
+
+100%[=============================================================================================>] 75.496.368  3,91MB/s   in 22s    
+
+2016-03-31 15:55:32 (3,27 MB/s) - ‘vagrant_1.8.1_x86_64.deb’ saved [75496368/75496368]
+```
+
+And now you can install it.
+
+```
+vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/chef_vagrant_provision$ sudo dpkg -i vagrant_1.8.1_x86_64.deb
+(Reading database ... 430608 files and directories currently installed.)
+Preparing to unpack vagrant_1.8.1_x86_64.deb ...
+Unpacking vagrant (1:1.8.1) over (1.4.3-1) ...
+Setting up vagrant (1:1.8.1) ...
+Processing triggers for man-db (2.6.7.1-1ubuntu1) ...
+```
+
+Now vagrant works fine.
+
+```
+vagrant@vagrant-VirtualBox:~/projects/big_chef/cookbooks/chef_vagrant_provision$ vagrant version
+Installed Version: 1.8.1
+Latest Version: 1.8.1
+
+You're running an up-to-date version of Vagrant!
+```
+
+Chef provisoning can be done with AWS, Docker, Azure, Vagrant, you name it.
+The way you specify which one to use are environment variables.
+
+```
+export CHEF_DRIVER=vagrant
+export VAGRANT_DEFAULT_PROVIDER=virtualbox
 ```

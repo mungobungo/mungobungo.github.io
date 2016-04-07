@@ -1,0 +1,8 @@
+---
+layout: post
+title:  "art collection"
+date:   2016-04-07 16:43:00 +0100
+categories: neural_networks
+---
+
+http://www.wikiart.org/

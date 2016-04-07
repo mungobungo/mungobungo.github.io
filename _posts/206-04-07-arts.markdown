@@ -6,3 +6,18 @@ categories: neural_networks
 ---
 
 http://www.wikiart.org/
+
+import os
+from subprocess import call
+styles = os.listdir('.')
+print(styles)
+pics = os.listdir('..')
+print(pics)
+
+for s in styles:
+    for p in pics:
+        print 'th neural_style.lua -style_image styles/' + s + ' -content_image pics/' + p + ' -output_image merge_'+ s + '_' + p + '.png -gpu 0 -num_iterations 1000 -image_size 512'
+        try:
+            call(['git', ''])
+        except:
+            print "ERROROROROROR"

@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "bunch o' links"
-date:   2016-04-06 13:59:00 +0100
+date:   2016-04-19 13:59:00 +0100
 categories: neural_networks, microservice
 ---
 

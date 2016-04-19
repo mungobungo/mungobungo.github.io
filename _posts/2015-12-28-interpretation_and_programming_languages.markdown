@@ -11,6 +11,7 @@ categories: link programming schema lisp eval interpretation
 
 ## Shriram Krishnamurth
 
+
 inttersting![http://cs.brown.edu/courses/cs173/2012/book/index.html]
 
 Примеры на лиспообразном Racket, но все простое как двери. Каждый шаг объясняется очень доступно и понятно.

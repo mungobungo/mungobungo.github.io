@@ -28,3 +28,5 @@ categories: neural_networks, microservice
 [crash course to failures handling](http://web.archive.org/web/20090430014122/http://nplus1.org/articles/a-crash-course-in-failure/)
 
 [street fighting mathematics](https://mitpress.mit.edu/books/street-fighting-mathematics)
+
+[beatiful thinking](https://mitpress.mit.edu/books/art-insight-science-and-engineering)

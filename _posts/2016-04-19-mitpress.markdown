@@ -1,10 +1,9 @@
-
-Decision Making Under Uncertainty
-Theory and Application
-
-Overview
-
-Many important problems involve decision making under uncertainty—that is, choosing actions based on often imperfect observations, with unknown outcomes. Designers of automated decision support systems must take into account the various sources of uncertainty while balancing the multiple objectives of the system. This book provides an introduction to the challenges of decision making under uncertainty from a computational perspective. It presents both the theory behind decision making models and algorithms and a collection of example applications that range from speech recognition to aircraft collision avoidance.
+---
+layout: post
+title:  "bunch o' books"
+date:   2016-04-19 13:59:00 +0100
+categories: books, learning
+---
 
 https://mitpress.mit.edu/decision-making-under-uncertainty
 

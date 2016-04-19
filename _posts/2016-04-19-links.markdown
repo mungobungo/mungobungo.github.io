@@ -1,0 +1,39 @@
+---
+layout: post
+title:  "bunch o' links"
+date:   2016-04-06 13:59:00 +0100
+categories: neural_networks, microservice
+---
+
+nice java intro
+http://www.mammatustech.com/consul-service-discovery-and-health-for-microservices-architecture-tutorial
+
+answering answers by looking at pictures
+http://iamaaditya.github.io/2016/04/visual_question_answering_demo_notebook
+
+zen of erlang in its best
+http://ferd.ca/the-zen-of-erlang.html
+
+brewery based microservice on java
+https://github.com/spring-cloud-samples/brewery
+
+another spring docker microservices
+http://www.kennybastani.com/2015/07/spring-cloud-docker-microservices.html
+
+spring cloud to the rescue
+https://dzone.com/articles/microservice-architecture-with-spring-cloud-and-do
+
+20 lines of code that beat AB testing
+http://stevehanov.ca/blog/index.php?id=132
+
+deep reinforcement learning p1
+http://www.nervanasys.com/deep-reinforcement-learning-with-neon/
+
+deep reinforcement learning p2
+http://www.nervanasys.com/demystifying-deep-reinforcement-learning/
+
+let it crash
+http://c2.com/cgi/wiki?LetItCrash
+
+crash course to failures handling
+http://web.archive.org/web/20090430014122/http://nplus1.org/articles/a-crash-course-in-failure/

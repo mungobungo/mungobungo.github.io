@@ -1,0 +1,28 @@
+---
+layout: post
+title:  "links for tecahcalbe an books"
+date:   2016-06-26 13:59:00 +0100
+categories: spring, oauth2 tutorials
+---
+
+https://teachable.com/features/ how to build your custom school
+
+[secure microservices wiht oauth2](http://callistaenterprise.se/blogg/teknik/2015/04/27/building-microservices-part-3-secure-APIs-with-OAuth/)
+
+[nsa paranoid mail server] (http://sealedabstract.com/code/nsa-proof-your-e-mail-in-2-hours/)
+
+[first 5 minutes on linux server for paranoics ] (https://plusbryan.com/my-first-5-minutes-on-a-server-or-essential-security-for-linux-servers)
+
+[oauth2 intro simplified] (https://aaronparecki.com/2012/07/29/2/oauth2-simplified)
+
+[information theory, inference and learning algorithms book](http://www.inference.phy.cam.ac.uk/itprnn/book.pdf)
+
+[poligraph drawing machine](http://www.instructables.com/id/Polargraph-Drawing-Machine/?ALLSTEPS)
+
+[spring security oauth2 server side] (https://labs.hybris.com/2012/08/10/oauth2-server-side-implementation-using-spring-security-oauth2-module/)
+
+[swagger for spring setup](http://www.baeldung.com/swagger-2-documentation-for-spring-rest-api)
+
+[machine learning ensemble guide](http://mlwave.com/kaggle-ensembling-guide/)
+
+![plank image](img/plank.jpg)
